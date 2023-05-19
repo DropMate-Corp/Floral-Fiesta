@@ -3,8 +3,7 @@ package tqs.estore.backend.datamodel;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.util.Set;
+import java.util.List;
 
 @Entity
 @Table
@@ -25,13 +24,13 @@ public class User {
     private String email;
 
     @Column(nullable = false)
-    private Integer phone_number;
+    private Integer phoneNumber;
 
     @Column(nullable = false)
     private String address;
 
     @JsonIgnore
     @OneToMany(mappedBy = "user")
-    private Set<Order> orders;
+    private List<Order> orders;
 
 }
