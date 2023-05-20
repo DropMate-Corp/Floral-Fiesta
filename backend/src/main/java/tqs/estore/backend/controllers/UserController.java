@@ -1,8 +1,10 @@
 package tqs.estore.backend.controllers;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tqs.estore.backend.datamodel.User;
+import tqs.estore.backend.exceptions.DuplicatedEmailException;
 import tqs.estore.backend.services.UserService;
 
 @RestController
@@ -17,8 +19,8 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<User> registerUser(@RequestParam String name, @RequestParam String email, @RequestParam String password, @RequestParam Integer phoneNumber, @RequestParam String address){
-        return null;
+    public ResponseEntity<User> registerUser(@RequestParam String name, @RequestParam String email, @RequestParam String password, @RequestParam Integer phoneNumber, @RequestParam String address) throws DuplicatedEmailException {
+        return new ResponseEntity<>(userService.registerUser(name, email, password, phoneNumber, address), HttpStatus.OK);
     }
 
     @PostMapping("/login")

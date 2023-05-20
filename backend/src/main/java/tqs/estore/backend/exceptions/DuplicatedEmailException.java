@@ -7,6 +7,6 @@ public class DuplicatedEmailException extends Exception {
     private static final long serialVersionUID = 1L;
 
     public DuplicatedEmailException(){
-        super("Email is already registered.");
+        super("Email address is already registered.");
     }
 }

@@ -13,7 +13,6 @@ import tqs.estore.backend.datamodel.User;
 import tqs.estore.backend.exceptions.DuplicatedEmailException;
 import tqs.estore.backend.services.UserService;
 
-import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -33,6 +32,7 @@ class UserController_withMockServiceTest {
     @BeforeEach
     public void setUp() {
         user = new User();
+        user.setUserId(1L);
         user.setName("User");
         user.setEmail("user@email.com");
         user.setPassword("password");
@@ -59,12 +59,13 @@ class UserController_withMockServiceTest {
                         .param("phoneNumber", user.getPhoneNumber().toString())
                         .param("address", user.getAddress()).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(1)))
-                .andExpect(jsonPath("$[0].name").value(user.getName()))
-                .andExpect(jsonPath("$[0].email").value(user.getEmail()))
-                .andExpect(jsonPath("$[0].password").value(user.getPassword()))
-                .andExpect(jsonPath("$[0].phoneNumber").value(user.getPhoneNumber()))
-                .andExpect(jsonPath("$[0].address").value(user.getAddress()));
+                .andExpect(jsonPath("$.userId").value(user.getUserId()))
+                .andExpect(jsonPath("$.name").value(user.getName()))
+                .andExpect(jsonPath("$.email").value(user.getEmail()))
+                .andExpect(jsonPath("$.password").value(user.getPassword()))
+                .andExpect(jsonPath("$.phoneNumber").value(user.getPhoneNumber()))
+                .andExpect(jsonPath("$.address").value(user.getAddress()));
+
     }
 
     @Test
@@ -74,6 +75,7 @@ class UserController_withMockServiceTest {
                 .thenReturn(user);
 
         User invalidUser = new User();
+        invalidUser.setUserId(2L);
         invalidUser.setName("Second User");
         invalidUser.setEmail("user@email.com"); // with the same email from User in setup
         invalidUser.setPassword("secondPassword");
