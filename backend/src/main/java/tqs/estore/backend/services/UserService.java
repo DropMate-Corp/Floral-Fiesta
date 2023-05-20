@@ -14,7 +14,19 @@ public class UserService {
     }
 
     public User registerUser(String name, String email, String password, Integer phoneNumber, String address) throws DuplicatedEmailException {
-        return null;
+
+        if(userRepository.findByEmail(email) != null){
+            throw new DuplicatedEmailException();
+        }
+
+        User user = new User();
+        user.setName(name);
+        user.setEmail(email);
+        user.setPassword(password);
+        user.setPhoneNumber(phoneNumber);
+        user.setAddress(address);
+
+        return userRepository.save(user);
     }
 
     public User loginUser(String email, String password){

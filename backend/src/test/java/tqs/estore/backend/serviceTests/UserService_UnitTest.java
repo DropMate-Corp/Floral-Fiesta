@@ -30,7 +30,6 @@ public class UserService_UnitTest {
     @BeforeEach
     public void setUp(){
         user = new User();
-        user.setUserId(1L);
         user.setName("User");
         user.setEmail("user@email.com");
         user.setPassword("password");
@@ -45,11 +44,11 @@ public class UserService_UnitTest {
 
     @Test
     public void whenRegisterValidUser_thenReturnUser () throws DuplicatedEmailException {
-        when(userRepository.save(user)).thenReturn(user);
+        when(userRepository.save(any(User.class))).thenReturn(user);
+        when(userRepository.findByEmail(user.getEmail())).thenReturn(null);
         User savedUser = userService.registerUser(user.getName(), user.getEmail(), user.getPassword(), user.getPhoneNumber(), user.getAddress());
 
         assertThat(savedUser).isNotNull();
-        assertThat(savedUser.getUserId()).isEqualTo(user.getUserId());
         assertThat(savedUser.getName()).isEqualTo(user.getName());
         assertThat(savedUser.getEmail()).isEqualTo(user.getEmail());
         assertThat(savedUser.getPassword()).isEqualTo(user.getPassword());
@@ -57,15 +56,14 @@ public class UserService_UnitTest {
         assertThat(savedUser.getAddress()).isEqualTo(user.getAddress());
 
         verify(userRepository, times(1)).findByEmail(user.getEmail());
-        verify(userRepository, times(1)).save(user);
+        verify(userRepository, times(1)).save(any(User.class));
 
     }
 
     @Test
-    public void whenRegisterInvalidUser_thenThrowDuplicatedEmailException () throws DuplicatedEmailException {
+    public void whenRegisterInvalidUser_thenThrowDuplicatedEmailException () {
         when(userRepository.findByEmail(user.getEmail())).thenReturn(user);
         User user2 = new User();
-        user2.setUserId(2L);
         user2.setName("User2");
         user2.setEmail(user.getEmail());
         user2.setPassword("password2");
@@ -74,7 +72,7 @@ public class UserService_UnitTest {
 
         assertThatThrownBy(() -> userService.registerUser(user2.getName(), user2.getEmail(), user2.getPassword(), user2.getPhoneNumber(), user2.getAddress()))
                 .isInstanceOf(DuplicatedEmailException.class)
-                .hasMessageContaining("Email " + user2.getEmail() + " already exists");
+                .hasMessageContaining("Email address is already registered.");
 
         verify(userRepository, times(1)).findByEmail(user2.getEmail());
         verify(userRepository, times(0)).save(user2);

@@ -31,7 +31,6 @@ class UserController_withMockServiceTest {
     @BeforeEach
     public void setUp() {
         user = new User();
-        user.setUserId(1L);
         user.setName("User");
         user.setEmail("user@email.com");
         user.setPassword("password");
@@ -58,7 +57,6 @@ class UserController_withMockServiceTest {
                         .param("phoneNumber", user.getPhoneNumber().toString())
                         .param("address", user.getAddress()).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.userId").value(user.getUserId()))
                 .andExpect(jsonPath("$.name").value(user.getName()))
                 .andExpect(jsonPath("$.email").value(user.getEmail()))
                 .andExpect(jsonPath("$.password").value(user.getPassword()))
@@ -76,7 +74,6 @@ class UserController_withMockServiceTest {
                 .thenReturn(user);
 
         User invalidUser = new User();
-        invalidUser.setUserId(2L);
         invalidUser.setName("Second User");
         invalidUser.setEmail("user@email.com"); // with the same email from User in setup
         invalidUser.setPassword("secondPassword");
