@@ -1,7 +1,7 @@
 package tqs.estore.backend.services;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import tqs.estore.backend.datamodel.User;
+import tqs.estore.backend.exceptions.DuplicatedEmailException;
 import tqs.estore.backend.repositories.UserRepository;
 
 @Service
@@ -13,11 +13,11 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public ResponseEntity<User> registerUser(String name, String email, Integer phoneNumber, String address){
+    public User registerUser(String name, String email, String password, Integer phoneNumber, String address) throws DuplicatedEmailException {
         return null;
     }
 
-    public ResponseEntity<User> loginUser(String email, String password){
+    public User loginUser(String email, String password){
         return null;
     }
 

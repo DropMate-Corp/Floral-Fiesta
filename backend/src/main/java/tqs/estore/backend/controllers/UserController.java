@@ -17,7 +17,7 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<User> registerUser(@RequestParam String name, @RequestParam String email, @RequestParam Integer phoneNumber, @RequestParam String address){
+    public ResponseEntity<User> registerUser(@RequestParam String name, @RequestParam String email, @RequestParam String password, @RequestParam Integer phoneNumber, @RequestParam String address){
         return null;
     }
 
