@@ -13,11 +13,10 @@ import tqs.estore.backend.datamodel.User;
 import tqs.estore.backend.exceptions.DuplicatedEmailException;
 import tqs.estore.backend.services.UserService;
 
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 
 @WebMvcTest(controllers = UserController.class)
 class UserController_withMockServiceTest {
@@ -66,6 +65,8 @@ class UserController_withMockServiceTest {
                 .andExpect(jsonPath("$.phoneNumber").value(user.getPhoneNumber()))
                 .andExpect(jsonPath("$.address").value(user.getAddress()));
 
+
+        verify(userService, times(1)).registerUser(user.getName(), user.getEmail(), user.getPassword(), user.getPhoneNumber(), user.getAddress());
     }
 
     @Test
@@ -94,6 +95,8 @@ class UserController_withMockServiceTest {
                         .param("address", invalidUser.getAddress()).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isConflict())
                 .andExpect(jsonPath("$.message").value("Email address is already registered."));
+
+        verify(userService, times(1)).registerUser(invalidUser.getName(), invalidUser.getEmail(), invalidUser.getPassword(), invalidUser.getPhoneNumber(), invalidUser.getAddress());
     }
 
 }
