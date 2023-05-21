@@ -10,6 +10,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import tqs.estore.backend.datamodel.User;
 import tqs.estore.backend.exceptions.DuplicatedEmailException;
+import tqs.estore.backend.exceptions.InvalidCredentialsException;
 import tqs.estore.backend.repositories.UserRepository;
 import tqs.estore.backend.services.UserService;
 
@@ -76,6 +77,43 @@ public class UserService_UnitTest {
 
         verify(userRepository, times(1)).findByEmail(user2.getEmail());
         verify(userRepository, times(0)).save(user2);
+    }
+
+    @Test
+    public void whenLoginValidUser_thenReturnUser () throws InvalidCredentialsException {
+        when(userRepository.findByEmail(user.getEmail())).thenReturn(user);
+        User loggedUser = userService.loginUser(user.getEmail(), user.getPassword());
+
+        assertThat(loggedUser).isNotNull();
+        assertThat(loggedUser.getName()).isEqualTo(user.getName());
+        assertThat(loggedUser.getEmail()).isEqualTo(user.getEmail());
+        assertThat(loggedUser.getPassword()).isEqualTo(user.getPassword());
+        assertThat(loggedUser.getPhoneNumber()).isEqualTo(user.getPhoneNumber());
+        assertThat(loggedUser.getAddress()).isEqualTo(user.getAddress());
+
+        verify(userRepository, times(1)).findByEmail(user.getEmail());
+    }
+
+    @Test
+    public void whenLoginWithInvalidEmail_thenThrowInvalidCredentialsException () {
+        when(userRepository.findByEmail(user.getEmail())).thenReturn(null);
+
+        assertThatThrownBy(() -> userService.loginUser(user.getEmail(), user.getPassword()))
+                .isInstanceOf(InvalidCredentialsException.class)
+                .hasMessageContaining("Invalid login credentials.");
+
+        verify(userRepository, times(1)).findByEmail(user.getEmail());
+    }
+
+    @Test
+    public void whenLoginWithInvalidPassword_thenThrowInvalidCredentialsException () {
+        when(userRepository.findByEmail(user.getEmail())).thenReturn(user);
+
+        assertThatThrownBy(() -> userService.loginUser(user.getEmail(), "invalidPassword"))
+                .isInstanceOf(InvalidCredentialsException.class)
+                .hasMessageContaining("Invalid login credentials.");
+
+        verify(userRepository, times(1)).findByEmail(user.getEmail());
     }
 
 }
