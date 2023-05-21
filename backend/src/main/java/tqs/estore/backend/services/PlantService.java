@@ -1,6 +1,5 @@
 package tqs.estore.backend.services;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import tqs.estore.backend.datamodel.Plant;
 import tqs.estore.backend.repositories.PlantRepository;
@@ -16,7 +15,7 @@ public class PlantService {
     }
 
     public List<Plant> getAllPlants(){
-        return null;
+        return plantRepository.findAll();
     }
 
     public Plant getPlantById(Long id){
@@ -24,11 +23,11 @@ public class PlantService {
     }
 
     public List<Plant> getPlantsByName(String name){
-        return null;
+        return plantRepository.findByNameContaining(name);
     }
 
     public List<Plant> getPlantsByCategory(Integer categoryID){
-        return null;
+        return plantRepository.findByCategoryCategoryId(categoryID.longValue());
     }
 
 }
