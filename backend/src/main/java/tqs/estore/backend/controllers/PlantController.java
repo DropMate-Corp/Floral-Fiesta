@@ -34,9 +34,9 @@ public class PlantController {
         return new ResponseEntity<>(plantService.getPlantsByName(name), HttpStatus.OK);
     }
 
-    @GetMapping("/category/{category}")
-    public ResponseEntity<List<Plant>> getPlantsByCategory(@PathVariable String category){
-        return new ResponseEntity<>(plantService.getPlantsByCategory(category), HttpStatus.OK);
+    @GetMapping("/category/{categoryID}")
+    public ResponseEntity<List<Plant>> getPlantsByCategory(@PathVariable Integer categoryID){
+        return new ResponseEntity<>(plantService.getPlantsByCategory(categoryID), HttpStatus.OK);
     }
 
 

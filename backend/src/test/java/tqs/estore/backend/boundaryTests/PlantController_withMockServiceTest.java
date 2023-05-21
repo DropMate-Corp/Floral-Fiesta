@@ -79,6 +79,7 @@ public class PlantController_withMockServiceTest {
     @AfterEach
     public void tearDown() {
         plants = null;
+        plantsByName = null;
     }
 
     @Test
@@ -151,9 +152,9 @@ public class PlantController_withMockServiceTest {
 
     @Test
     public void whenGetPlantsByCategory_thenReturnPlants_andStatus200() throws Exception {
-        when(plantService.getPlantsByCategory("Orchid")).thenReturn(plantsByName);
+        when(plantService.getPlantsByCategory(1)).thenReturn(plantsByName);
 
-        mockMvc.perform(get("/floralfiesta/plant/category/Orchid"))
+        mockMvc.perform(get("/floralfiesta/plant/category/1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)))
                 .andExpect(jsonPath("$[0].name").value(plantsByName.get(0).getName()))
@@ -165,17 +166,17 @@ public class PlantController_withMockServiceTest {
                 .andExpect(jsonPath("$[1].photo").value(plantsByName.get(1).getPhoto()))
                 .andExpect(jsonPath("$[1].description").value(plantsByName.get(1).getDescription()));
 
-        verify(plantService, times(1)).getPlantsByCategory("Orchid");
+        verify(plantService, times(1)).getPlantsByCategory(1);
     }
 
     @Test
     public void whenGetPlantsByCategory_thenReturnEmptyList_andStatus200() throws Exception {
-        when(plantService.getPlantsByCategory("Violet")).thenReturn(new ArrayList<>());
+        when(plantService.getPlantsByCategory(3)).thenReturn(new ArrayList<>());
 
-        mockMvc.perform(get("/floralfiesta/plant/category/Violet"))
+        mockMvc.perform(get("/floralfiesta/plant/category/3"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(0)));
 
-        verify(plantService, times(1)).getPlantsByCategory("Violet");
+        verify(plantService, times(1)).getPlantsByCategory(3);
     }
 }

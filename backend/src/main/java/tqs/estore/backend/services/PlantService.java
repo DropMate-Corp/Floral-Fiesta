@@ -27,7 +27,7 @@ public class PlantService {
         return null;
     }
 
-    public List<Plant> getPlantsByCategory(String category){
+    public List<Plant> getPlantsByCategory(Integer categoryID){
         return null;
     }
 
