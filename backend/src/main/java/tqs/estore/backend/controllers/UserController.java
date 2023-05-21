@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tqs.estore.backend.datamodel.User;
 import tqs.estore.backend.exceptions.DuplicatedEmailException;
+import tqs.estore.backend.exceptions.InvalidCredentialsException;
 import tqs.estore.backend.services.UserService;
 
 @RestController
@@ -24,7 +25,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<User> loginUser(@RequestParam String email, @RequestParam String password){
+    public ResponseEntity<User> loginUser(@RequestParam String email, @RequestParam String password) throws InvalidCredentialsException {
         return null;
     }
 

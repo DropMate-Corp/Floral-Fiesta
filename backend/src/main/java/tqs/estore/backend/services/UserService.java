@@ -2,6 +2,7 @@ package tqs.estore.backend.services;
 import org.springframework.stereotype.Service;
 import tqs.estore.backend.datamodel.User;
 import tqs.estore.backend.exceptions.DuplicatedEmailException;
+import tqs.estore.backend.exceptions.InvalidCredentialsException;
 import tqs.estore.backend.repositories.UserRepository;
 
 @Service
@@ -39,7 +40,7 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public User loginUser(String email, String password){
+    public User loginUser(String email, String password) throws InvalidCredentialsException {
         return null;
     }
 
