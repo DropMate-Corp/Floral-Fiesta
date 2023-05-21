@@ -127,7 +127,7 @@ class UserController_withMockServiceTest {
                                 .param("email", user.getEmail())
                                 .param("password", wrongPassword).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isUnauthorized())
-                .andExpect(jsonPath("$.message").value("Invalid credentials."));
+                .andExpect(jsonPath("$.message").value("Invalid login credentials."));
 
         verify(userService, times(1)).loginUser(user.getEmail(), wrongPassword);
     }
@@ -143,7 +143,7 @@ class UserController_withMockServiceTest {
                                 .param("email", wrongEmail)
                                 .param("password", user.getPassword()).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isUnauthorized())
-                .andExpect(jsonPath("$.message").value("Invalid credentials."));
+                .andExpect(jsonPath("$.message").value("Invalid login credentials."));
 
         verify(userService, times(1)).loginUser(wrongEmail, user.getPassword());
     }

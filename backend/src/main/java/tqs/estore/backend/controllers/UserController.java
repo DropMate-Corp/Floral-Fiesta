@@ -26,7 +26,7 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity<User> loginUser(@RequestParam String email, @RequestParam String password) throws InvalidCredentialsException {
-        return null;
+        return new ResponseEntity<>(userService.loginUser(email, password), HttpStatus.OK);
     }
 
 }
