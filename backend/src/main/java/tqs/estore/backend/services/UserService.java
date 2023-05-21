@@ -1,7 +1,7 @@
 package tqs.estore.backend.services;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import tqs.estore.backend.datamodel.User;
+import tqs.estore.backend.exceptions.DuplicatedEmailException;
 import tqs.estore.backend.repositories.UserRepository;
 
 @Service
@@ -13,11 +13,33 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public ResponseEntity<User> registerUser(String name, String email, Integer phoneNumber, String address){
-        return null;
+    /** This method registers a new user in the floralfiesta database
+     * @param name - name of the user to be registered
+     * @param email - email of the user to be registered
+     * @param password - password of the user to be registered
+     * @param phoneNumber - phone number of the user to be registered
+     * @param address - address of the user to be registered
+     * @return User - the user created in the database
+     * @throws DuplicatedEmailException - if the email of the user already exists in the database
+     **/
+
+    public User registerUser(String name, String email, String password, Integer phoneNumber, String address) throws DuplicatedEmailException {
+
+        if(userRepository.findByEmail(email) != null){
+            throw new DuplicatedEmailException();
+        }
+
+        User user = new User();
+        user.setName(name);
+        user.setEmail(email);
+        user.setPassword(password);
+        user.setPhoneNumber(phoneNumber);
+        user.setAddress(address);
+
+        return userRepository.save(user);
     }
 
-    public ResponseEntity<User> loginUser(String email, String password){
+    public User loginUser(String email, String password){
         return null;
     }
 
