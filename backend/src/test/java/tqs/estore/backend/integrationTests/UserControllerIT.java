@@ -62,4 +62,35 @@ public class UserControllerIT {
                 .assertThat().body("message", equalTo("Email address is already registered."));
     }
 
+    @Test
+    @Order(3)
+    public void whenLoginValidUser_thenReturnUser_andStatus200() {
+        RestAssured.with().contentType("application/json")
+                .when().post(BASE_URL + port + "/floralfiesta/user/login?email=" + "user@email.com" + "&password=" + "password")
+                .then().statusCode(200)
+                .assertThat().body("name", equalTo("User"))
+                .assertThat().body("email", equalTo("user@email.com"))
+                .assertThat().body("password", equalTo("password"))
+                .assertThat().body("phoneNumber", equalTo(123456789))
+                .assertThat().body("address", equalTo("Address"));
+    }
+
+    @Test
+    @Order(4)
+    public void whenLoginWithInvalidEmail_thenReturnStatus401() {
+        RestAssured.with().contentType("application/json")
+                .when().post(BASE_URL + port + "/floralfiesta/user/login?email=" + "invalidemail@email.com" + "&password=" + "password")
+                .then().statusCode(401)
+                .assertThat().body("message", equalTo("Invalid login credentials."));
+    }
+
+    @Test
+    @Order(5)
+    public void whenLoginWithInvalidPassword_thenReturnStatus401() {
+        RestAssured.with().contentType("application/json")
+                .when().post(BASE_URL + port + "/floralfiesta/user/login?email=" + "user@email.com" + "&password=" + "invalidPassword")
+                .then().statusCode(401)
+                .assertThat().body("message", equalTo("Invalid login credentials."));
+    }
+
 }

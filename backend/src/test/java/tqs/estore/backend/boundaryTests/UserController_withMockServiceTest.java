@@ -11,6 +11,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import tqs.estore.backend.controllers.UserController;
 import tqs.estore.backend.datamodel.User;
 import tqs.estore.backend.exceptions.DuplicatedEmailException;
+import tqs.estore.backend.exceptions.InvalidCredentialsException;
 import tqs.estore.backend.services.UserService;
 
 import static org.mockito.Mockito.*;
@@ -94,6 +95,57 @@ class UserController_withMockServiceTest {
                 .andExpect(jsonPath("$.message").value("Email address is already registered."));
 
         verify(userService, times(1)).registerUser(invalidUser.getName(), invalidUser.getEmail(), invalidUser.getPassword(), invalidUser.getPhoneNumber(), invalidUser.getAddress());
+    }
+
+    @Test
+    public void whenLoginValidUser_thenReturnUser_andStatus200() throws Exception {
+        when(userService.loginUser(user.getEmail(), user.getPassword()))
+                .thenReturn(user);
+
+        mockMvc.perform(
+                        post("/floralfiesta/user/login")
+                                .param("email", user.getEmail())
+                                .param("password", user.getPassword()).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name").value(user.getName()))
+                .andExpect(jsonPath("$.email").value(user.getEmail()))
+                .andExpect(jsonPath("$.password").value(user.getPassword()))
+                .andExpect(jsonPath("$.phoneNumber").value(user.getPhoneNumber()))
+                .andExpect(jsonPath("$.address").value(user.getAddress()));
+
+        verify(userService, times(1)).loginUser(user.getEmail(), user.getPassword());
+    }
+
+    @Test
+    public void whenLoginWithInvalidPassword_thenReturnStatus401() throws Exception {
+        String wrongPassword = "wrongPassword";
+        when(userService.loginUser(user.getEmail(), wrongPassword))
+                .thenThrow(new InvalidCredentialsException());
+
+        mockMvc.perform(
+                        post("/floralfiesta/user/login")
+                                .param("email", user.getEmail())
+                                .param("password", wrongPassword).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isUnauthorized())
+                .andExpect(jsonPath("$.message").value("Invalid login credentials."));
+
+        verify(userService, times(1)).loginUser(user.getEmail(), wrongPassword);
+    }
+
+    @Test
+    public void whenLoginWithInvalidEmail_thenReturnStatus401() throws Exception {
+        String wrongEmail = "wrongEmail@mail.com";
+        when(userService.loginUser(wrongEmail, user.getPassword()))
+                .thenThrow(new InvalidCredentialsException());
+
+        mockMvc.perform(
+                        post("/floralfiesta/user/login")
+                                .param("email", wrongEmail)
+                                .param("password", user.getPassword()).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isUnauthorized())
+                .andExpect(jsonPath("$.message").value("Invalid login credentials."));
+
+        verify(userService, times(1)).loginUser(wrongEmail, user.getPassword());
     }
 
 }

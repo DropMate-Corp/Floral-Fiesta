@@ -2,6 +2,7 @@ package tqs.estore.backend.services;
 import org.springframework.stereotype.Service;
 import tqs.estore.backend.datamodel.User;
 import tqs.estore.backend.exceptions.DuplicatedEmailException;
+import tqs.estore.backend.exceptions.InvalidCredentialsException;
 import tqs.estore.backend.repositories.UserRepository;
 
 @Service
@@ -39,8 +40,20 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public User loginUser(String email, String password){
-        return null;
+
+    /** This method logs in a user in the floralfiesta database
+     * @param email - email of the user to be logged in
+     * @param password - password of the user to be logged in
+     * @return User - the user logged in
+     * @throws InvalidCredentialsException - if the email or password of the user are incorrect
+     **/
+
+    public User loginUser(String email, String password) throws InvalidCredentialsException {
+        User user = userRepository.findByEmail(email);
+        if(user != null && user.getPassword().equals(password)){
+            return user;
+        }
+        throw new InvalidCredentialsException();
     }
 
 }
