@@ -1,10 +1,8 @@
 package tqs.estore.backend.controllers;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import tqs.estore.backend.datamodel.Plant;
 import tqs.estore.backend.services.PlantService;
 
@@ -23,22 +21,22 @@ public class PlantController {
 
     @GetMapping("/all")
     public ResponseEntity<List<Plant>> getAllPlants(){
-        return null;
+        return new ResponseEntity<>(plantService.getAllPlants(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Plant> getPlantById(Long id){
+    public ResponseEntity<Plant> getPlantById(@PathVariable Long id){
         return null;
     }
 
     @GetMapping("/name/{name}")
-    public ResponseEntity<List<Plant>> getPlantsByName(String name){
-        return null;
+    public ResponseEntity<List<Plant>> getPlantsByName(@PathVariable String name){
+        return new ResponseEntity<>(plantService.getPlantsByName(name), HttpStatus.OK);
     }
 
     @GetMapping("/category/{category}")
-    public ResponseEntity<List<Plant>> getPlantsByCategory(String category){
-        return null;
+    public ResponseEntity<List<Plant>> getPlantsByCategory(@PathVariable String category){
+        return new ResponseEntity<>(plantService.getPlantsByCategory(category), HttpStatus.OK);
     }
 
 

@@ -146,7 +146,7 @@ public class PlantController_withMockServiceTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(0)));
 
-        verify(plantService, times(1)).getPlantsByName("Orchid");
+        verify(plantService, times(1)).getPlantsByName("Violet");
     }
 
     @Test
@@ -176,6 +176,6 @@ public class PlantController_withMockServiceTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(0)));
 
-        verify(plantService, times(1)).getPlantsByCategory("Orchid");
+        verify(plantService, times(1)).getPlantsByCategory("Violet");
     }
 }
