@@ -13,6 +13,16 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
+    /** This method registers a new user in the floralfiesta database
+     * @param name - name of the user to be registered
+     * @param email - email of the user to be registered
+     * @param password - password of the user to be registered
+     * @param phoneNumber - phone number of the user to be registered
+     * @param address - address of the user to be registered
+     * @return User - the user created in the database
+     * @throws DuplicatedEmailException - if the email of the user already exists in the database
+     **/
+
     public User registerUser(String name, String email, String password, Integer phoneNumber, String address) throws DuplicatedEmailException {
 
         if(userRepository.findByEmail(email) != null){
