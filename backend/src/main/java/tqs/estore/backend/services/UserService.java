@@ -41,7 +41,11 @@ public class UserService {
     }
 
     public User loginUser(String email, String password) throws InvalidCredentialsException {
-        return null;
+        User user = userRepository.findByEmail(email);
+        if(user != null && user.getPassword().equals(password)){
+            return user;
+        }
+        throw new InvalidCredentialsException();
     }
 
 }
