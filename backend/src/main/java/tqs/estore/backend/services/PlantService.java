@@ -15,19 +15,19 @@ public class PlantService {
         this.plantRepository = plantRepository;
     }
 
-    public ResponseEntity<List<Plant>> getAllPlants(){
+    public List<Plant> getAllPlants(){
         return null;
     }
 
-    public ResponseEntity<Plant> getPlantById(Long id){
+    public Plant getPlantById(Long id){
         return null;
     }
 
-    public ResponseEntity<List<Plant>> getPlantsByName(String name){
+    public List<Plant> getPlantsByName(String name){
         return null;
     }
 
-    public ResponseEntity<List<Plant>> getPlantsByCategory(String category){
+    public List<Plant> getPlantsByCategory(String category){
         return null;
     }
 
