@@ -68,7 +68,7 @@ class UserController_withMockServiceTest {
     }
 
     @Test
-    public void whenRegisterInvalidUser_thenReturnStatus400() throws Exception {
+    public void whenRegisterInvalidUser_thenReturnStatus409() throws Exception {
         // Valid User Registered
         when(userService.registerUser(user.getName(), user.getEmail(), user.getPassword(), user.getPhoneNumber(), user.getAddress()))
                 .thenReturn(user);
