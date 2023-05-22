@@ -12,6 +12,12 @@ public class CategoryService {
     public CategoryService(CategoryRepository categoryRepository){
         this.categoryRepository = categoryRepository;
     }
+
+
+    /**
+     * Get all categories from floralfiesta database
+     * @return List of categories
+     */
     public List<PlantCategory> getAllCategories(){
         return categoryRepository.findAll();
     }
