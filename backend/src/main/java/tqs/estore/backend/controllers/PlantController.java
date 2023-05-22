@@ -26,7 +26,7 @@ public class PlantController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Plant> getPlantById(@PathVariable Long id){
-        return null;
+        return new ResponseEntity<>(plantService.getPlantById(id), HttpStatus.OK);
     }
 
     @GetMapping("/name/{name}")
