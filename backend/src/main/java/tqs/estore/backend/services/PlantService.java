@@ -6,6 +6,7 @@ import tqs.estore.backend.exceptions.PlantNotFoundException;
 import tqs.estore.backend.repositories.PlantRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PlantService {
@@ -24,7 +25,11 @@ public class PlantService {
     }
 
     public Plant getPlantById(Long id) throws PlantNotFoundException {
-        return null;
+        Optional<Plant> plant = plantRepository.findById(id);
+        if(plant.isPresent()){
+            return plant.get();
+        }
+        throw new PlantNotFoundException();
     }
 
     /**
