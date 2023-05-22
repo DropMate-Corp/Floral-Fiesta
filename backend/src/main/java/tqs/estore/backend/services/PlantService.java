@@ -14,6 +14,10 @@ public class PlantService {
         this.plantRepository = plantRepository;
     }
 
+    /**
+     * Get all plants from floralfiesta database
+     * @return List of plants
+     */
     public List<Plant> getAllPlants(){
         return plantRepository.findAll();
     }
@@ -22,10 +26,21 @@ public class PlantService {
         return null;
     }
 
+    /**
+     * Get plants from floralfiesta database by name
+     * @param name - name of the plant
+     * @return List of plants
+     */
+
     public List<Plant> getPlantsByName(String name){
         return plantRepository.findByNameContaining(name);
     }
 
+    /**
+     * Get plants from floralfiesta database by category
+     * @param categoryID - id of the category
+     * @return List of plants
+     */
     public List<Plant> getPlantsByCategory(Integer categoryID){
         return plantRepository.findByCategoryCategoryId(categoryID.longValue());
     }
