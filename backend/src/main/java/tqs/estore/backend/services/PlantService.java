@@ -2,6 +2,7 @@ package tqs.estore.backend.services;
 
 import org.springframework.stereotype.Service;
 import tqs.estore.backend.datamodel.Plant;
+import tqs.estore.backend.exceptions.PlantNotFoundException;
 import tqs.estore.backend.repositories.PlantRepository;
 
 import java.util.List;
@@ -22,7 +23,7 @@ public class PlantService {
         return plantRepository.findAll();
     }
 
-    public Plant getPlantById(Long id){
+    public Plant getPlantById(Long id) throws PlantNotFoundException {
         return null;
     }
 

@@ -8,6 +8,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 import tqs.estore.backend.controllers.PlantController;
 import tqs.estore.backend.datamodel.PlantCategory;
+import tqs.estore.backend.exceptions.PlantNotFoundException;
 import tqs.estore.backend.services.PlantService;
 
 import java.util.ArrayList;
@@ -195,5 +196,16 @@ class PlantController_withMockServiceTest {
                 .andExpect(jsonPath("$.category.name").value(plant1.getCategory().getName()));
 
         verify(plantService, times(1)).getPlantById(1L);
+    }
+
+    @Test
+    void whenGetPlantById_thenThrowPlantNotFoundException() throws Exception {
+        when(plantService.getPlantById(4L)).thenThrow(new PlantNotFoundException());
+
+        mockMvc.perform(get("/floralfiesta/plant/4"))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.message").value("Plant was not found with provided id."));
+
+        verify(plantService, times(1)).getPlantById(4L);
     }
 }

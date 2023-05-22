@@ -4,6 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tqs.estore.backend.datamodel.Plant;
+import tqs.estore.backend.exceptions.PlantNotFoundException;
 import tqs.estore.backend.services.PlantService;
 
 import java.util.List;
@@ -25,7 +26,7 @@ public class PlantController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Plant> getPlantById(@PathVariable Long id){
+    public ResponseEntity<Plant> getPlantById(@PathVariable Long id) throws PlantNotFoundException {
         return new ResponseEntity<>(plantService.getPlantById(id), HttpStatus.OK);
     }
 
