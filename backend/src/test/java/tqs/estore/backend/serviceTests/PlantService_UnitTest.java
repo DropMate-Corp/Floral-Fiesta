@@ -8,10 +8,12 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import tqs.estore.backend.datamodel.Plant;
 import tqs.estore.backend.datamodel.PlantCategory;
+import tqs.estore.backend.exceptions.PlantNotFoundException;
 import tqs.estore.backend.repositories.PlantRepository;
 import tqs.estore.backend.services.PlantService;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
@@ -136,6 +138,28 @@ class PlantService_UnitTest {
 
         assertThat(foundPlants).isEqualTo(new ArrayList<>());
         verify(plantRepository, times(1)).findByCategoryCategoryId(3L);
+    }
+
+    @Test
+    void whenGetPlantById_thenReturnPlant() throws PlantNotFoundException {
+        when(plantRepository.findById(1L)).thenReturn(Optional.ofNullable(plants.get(0)));
+
+        Plant foundPlant = plantService.getPlantById(1L);
+
+        assertThat(foundPlant).isEqualTo(plants.get(0));
+        verify(plantRepository, times(1)).findById(1L);
+    }
+
+    @Test
+    void whenGetPlantById_thenThrowsPlantNotFoundException() {
+        when(plantRepository.findById(4L)).thenReturn(Optional.empty());
+
+        try {
+            plantService.getPlantById(4L);
+        } catch (PlantNotFoundException e) {
+            assertThat(e.getMessage()).isEqualTo("Plant was not found with provided id.");
+        }
+        verify(plantRepository, times(1)).findById(4L);
     }
 
 
