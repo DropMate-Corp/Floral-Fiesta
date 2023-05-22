@@ -22,7 +22,7 @@ import static org.hamcrest.Matchers.is;
 @Testcontainers
 @TestPropertySource(properties = {"spring.jpa.hibernate.ddl-auto=create-drop"})
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class CategoryControllerIT {
+class CategoryControllerIT {
 
     private final String BASE_URL = "http://localhost:";
 
@@ -65,7 +65,7 @@ public class CategoryControllerIT {
     }
 
     @Test
-    public void whenGetAllCategories_thenReturnCategories_andStatus200() {
+    void whenGetAllCategories_thenReturnCategories_andStatus200() {
         RestAssured.get(BASE_URL + port + "/floralfiesta/category/all")
                 .then()
                 .statusCode(200)
@@ -77,7 +77,7 @@ public class CategoryControllerIT {
     }
 
     @Test
-    public void whenGetAllCategories_thenReturnEmptyList_andStatus200() {
+    void whenGetAllCategories_thenReturnEmptyList_andStatus200() {
         categoryRepository.deleteAll();
 
         RestAssured.get(BASE_URL + port + "/floralfiesta/category/all")

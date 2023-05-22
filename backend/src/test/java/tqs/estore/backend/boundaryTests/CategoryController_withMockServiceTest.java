@@ -21,7 +21,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(controllers = CategoryController.class)
-public class CategoryController_withMockServiceTest {
+class CategoryController_withMockServiceTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -52,7 +52,7 @@ public class CategoryController_withMockServiceTest {
     }
 
     @Test
-    public void whenGetAllCategories_thenReturnCategories_andStatus200() throws Exception {
+    void whenGetAllCategories_thenReturnCategories_andStatus200() throws Exception {
         when(categoryService.getAllCategories()).thenReturn(categories);
         mockMvc.perform(get("/floralfiesta/category/all"))
                 .andExpect(status().isOk())
@@ -68,7 +68,7 @@ public class CategoryController_withMockServiceTest {
     }
 
     @Test
-    public void whenGetAllCategories_thenReturnEmptyList_andStatus200() throws Exception {
+    void whenGetAllCategories_thenReturnEmptyList_andStatus200() throws Exception {
         when(categoryService.getAllCategories()).thenReturn(List.of());
         mockMvc.perform(get("/floralfiesta/category/all"))
                 .andExpect(status().isOk())

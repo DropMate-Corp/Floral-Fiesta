@@ -46,7 +46,7 @@ class UserController_withMockServiceTest {
 
 
     @Test
-    public void whenRegisterValidUser_thenReturnUser_andStatus200() throws Exception {
+    void whenRegisterValidUser_thenReturnUser_andStatus200() throws Exception {
         when(userService.registerUser(user.getName(), user.getEmail(), user.getPassword() ,user.getPhoneNumber(), user.getAddress()))
                 .thenReturn(user);
 
@@ -69,7 +69,7 @@ class UserController_withMockServiceTest {
     }
 
     @Test
-    public void whenRegisterInvalidUser_thenReturnStatus409() throws Exception {
+    void whenRegisterInvalidUser_thenReturnStatus409() throws Exception {
         // Valid User Registered
         when(userService.registerUser(user.getName(), user.getEmail(), user.getPassword(), user.getPhoneNumber(), user.getAddress()))
                 .thenReturn(user);
@@ -98,7 +98,7 @@ class UserController_withMockServiceTest {
     }
 
     @Test
-    public void whenLoginValidUser_thenReturnUser_andStatus200() throws Exception {
+    void whenLoginValidUser_thenReturnUser_andStatus200() throws Exception {
         when(userService.loginUser(user.getEmail(), user.getPassword()))
                 .thenReturn(user);
 
@@ -117,7 +117,7 @@ class UserController_withMockServiceTest {
     }
 
     @Test
-    public void whenLoginWithInvalidPassword_thenReturnStatus401() throws Exception {
+    void whenLoginWithInvalidPassword_thenReturnStatus401() throws Exception {
         String wrongPassword = "wrongPassword";
         when(userService.loginUser(user.getEmail(), wrongPassword))
                 .thenThrow(new InvalidCredentialsException());
@@ -133,7 +133,7 @@ class UserController_withMockServiceTest {
     }
 
     @Test
-    public void whenLoginWithInvalidEmail_thenReturnStatus401() throws Exception {
+    void whenLoginWithInvalidEmail_thenReturnStatus401() throws Exception {
         String wrongEmail = "wrongEmail@mail.com";
         when(userService.loginUser(wrongEmail, user.getPassword()))
                 .thenThrow(new InvalidCredentialsException());

@@ -21,7 +21,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(controllers = PlantController.class)
-public class PlantController_withMockServiceTest {
+class PlantController_withMockServiceTest {
     @Autowired
     private MockMvc mockMvc;
 
@@ -83,7 +83,7 @@ public class PlantController_withMockServiceTest {
     }
 
     @Test
-    public void whenGetAllPlants_thenReturnPlants_andStatus200() throws Exception {
+    void whenGetAllPlants_thenReturnPlants_andStatus200() throws Exception {
         when(plantService.getAllPlants()).thenReturn(plants);
 
         mockMvc.perform(get("/floralfiesta/plant/all"))
@@ -110,7 +110,7 @@ public class PlantController_withMockServiceTest {
     }
 
     @Test
-    public void whenGetAllPlants_thenReturnEmptyList_andStatus200() throws Exception {
+    void whenGetAllPlants_thenReturnEmptyList_andStatus200() throws Exception {
         when(plantService.getAllPlants()).thenReturn(new ArrayList<>());
 
         mockMvc.perform(get("/floralfiesta/plant/all"))
@@ -121,7 +121,7 @@ public class PlantController_withMockServiceTest {
     }
 
     @Test
-    public void whenGetPlantsByName_thenReturnPlants_andStatus200() throws Exception {
+    void whenGetPlantsByName_thenReturnPlants_andStatus200() throws Exception {
         when(plantService.getPlantsByName("Orchid")).thenReturn(plantsByName);
 
         mockMvc.perform(get("/floralfiesta/plant/name/Orchid"))
@@ -140,7 +140,7 @@ public class PlantController_withMockServiceTest {
     }
 
     @Test
-    public void whenGetPlantsByName_thenReturnEmptyList_andStatus200() throws Exception {
+    void whenGetPlantsByName_thenReturnEmptyList_andStatus200() throws Exception {
         when(plantService.getPlantsByName("Violet")).thenReturn(new ArrayList<>());
 
         mockMvc.perform(get("/floralfiesta/plant/name/Violet"))
@@ -151,7 +151,7 @@ public class PlantController_withMockServiceTest {
     }
 
     @Test
-    public void whenGetPlantsByCategory_thenReturnPlants_andStatus200() throws Exception {
+    void whenGetPlantsByCategory_thenReturnPlants_andStatus200() throws Exception {
         when(plantService.getPlantsByCategory(1)).thenReturn(plantsByName);
 
         mockMvc.perform(get("/floralfiesta/plant/category/1"))
@@ -170,7 +170,7 @@ public class PlantController_withMockServiceTest {
     }
 
     @Test
-    public void whenGetPlantsByCategory_thenReturnEmptyList_andStatus200() throws Exception {
+    void whenGetPlantsByCategory_thenReturnEmptyList_andStatus200() throws Exception {
         when(plantService.getPlantsByCategory(3)).thenReturn(new ArrayList<>());
 
         mockMvc.perform(get("/floralfiesta/plant/category/3"))

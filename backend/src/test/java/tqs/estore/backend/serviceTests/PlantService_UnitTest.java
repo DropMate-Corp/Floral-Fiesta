@@ -17,7 +17,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class PlantService_UnitTest {
+class PlantService_UnitTest {
     @Mock
     private PlantRepository plantRepository;
 
@@ -79,7 +79,7 @@ public class PlantService_UnitTest {
     }
 
     @Test
-    public void whenGetAllPlants_thenReturnPlants() {
+    void whenGetAllPlants_thenReturnPlants() {
         when(plantRepository.findAll()).thenReturn(plants);
 
         List<Plant> foundPlants = plantService.getAllPlants();
@@ -89,7 +89,7 @@ public class PlantService_UnitTest {
     }
 
     @Test
-    public void whenGetAllPlants_thenReturnsEmptyList() {
+    void whenGetAllPlants_thenReturnsEmptyList() {
         when(plantRepository.findAll()).thenReturn(new ArrayList<>());
 
         List<Plant> foundPlants = plantService.getAllPlants();
@@ -99,7 +99,7 @@ public class PlantService_UnitTest {
     }
 
     @Test
-    public void whenGetPlantsByName_thenReturnPlants() {
+    void whenGetPlantsByName_thenReturnPlants() {
         when(plantRepository.findByNameContaining("Orchid")).thenReturn(plantsByName);
 
         List<Plant> foundPlants = plantService.getPlantsByName("Orchid");
@@ -109,7 +109,7 @@ public class PlantService_UnitTest {
     }
 
     @Test
-    public void whenGetPlantsByName_thenReturnsEmptyList() {
+    void whenGetPlantsByName_thenReturnsEmptyList() {
         when(plantRepository.findByNameContaining("Tulip")).thenReturn(new ArrayList<>());
 
         List<Plant> foundPlants = plantService.getPlantsByName("Tulip");
@@ -119,7 +119,7 @@ public class PlantService_UnitTest {
     }
 
     @Test
-    public void whenGetPlantsByCategory_thenReturnPlants() {
+    void whenGetPlantsByCategory_thenReturnPlants() {
         when(plantRepository.findByCategoryCategoryId(1L)).thenReturn(plantsByName);
 
         List<Plant> foundPlants = plantService.getPlantsByCategory(1);
@@ -129,7 +129,7 @@ public class PlantService_UnitTest {
     }
 
     @Test
-    public void whenGetPlantsByCategory_thenReturnsEmptyList() {
+    void whenGetPlantsByCategory_thenReturnsEmptyList() {
         when(plantRepository.findByCategoryCategoryId(3L)).thenReturn(new ArrayList<>());
 
         List<Plant> foundPlants = plantService.getPlantsByCategory(3);
@@ -137,7 +137,5 @@ public class PlantService_UnitTest {
         assertThat(foundPlants).isEqualTo(new ArrayList<>());
         verify(plantRepository, times(1)).findByCategoryCategoryId(3L);
     }
-
-
 
 }

@@ -21,7 +21,7 @@ import static org.hamcrest.Matchers.equalTo;
 @TestPropertySource(properties = {"spring.jpa.hibernate.ddl-auto=create-drop"})
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 
-public class UserControllerIT {
+class UserControllerIT {
     private final String BASE_URL = "http://localhost:";
 
     @LocalServerPort
@@ -42,7 +42,7 @@ public class UserControllerIT {
 
     @Test
     @Order(1)
-    public void whenRegisterValidUser_thenReturnUser_andStatus200() {
+    void whenRegisterValidUser_thenReturnUser_andStatus200() {
         RestAssured.with().contentType("application/json")
                 .when().post(BASE_URL + port + "/floralfiesta/user/register?name=User&email=user@email.com&password=password&phoneNumber=123456789&address=Address")
                 .then().statusCode(200)
@@ -55,7 +55,7 @@ public class UserControllerIT {
 
     @Test
     @Order(2)
-    public void whenRegisterInvalidUser_thenReturnStatus409() {
+    void whenRegisterInvalidUser_thenReturnStatus409() {
         RestAssured.with().contentType("application/json")
                 .when().post(BASE_URL + port + "/floralfiesta/user/register?name=User&email=user@email.com&password=password&phoneNumber=123456789&address=Address")
                 .then().statusCode(409)
@@ -64,7 +64,7 @@ public class UserControllerIT {
 
     @Test
     @Order(3)
-    public void whenLoginValidUser_thenReturnUser_andStatus200() {
+    void whenLoginValidUser_thenReturnUser_andStatus200() {
         RestAssured.with().contentType("application/json")
                 .when().post(BASE_URL + port + "/floralfiesta/user/login?email=" + "user@email.com" + "&password=" + "password")
                 .then().statusCode(200)
@@ -77,7 +77,7 @@ public class UserControllerIT {
 
     @Test
     @Order(4)
-    public void whenLoginWithInvalidEmail_thenReturnStatus401() {
+    void whenLoginWithInvalidEmail_thenReturnStatus401() {
         RestAssured.with().contentType("application/json")
                 .when().post(BASE_URL + port + "/floralfiesta/user/login?email=" + "invalidemail@email.com" + "&password=" + "password")
                 .then().statusCode(401)
@@ -86,7 +86,7 @@ public class UserControllerIT {
 
     @Test
     @Order(5)
-    public void whenLoginWithInvalidPassword_thenReturnStatus401() {
+    void whenLoginWithInvalidPassword_thenReturnStatus401() {
         RestAssured.with().contentType("application/json")
                 .when().post(BASE_URL + port + "/floralfiesta/user/login?email=" + "user@email.com" + "&password=" + "invalidPassword")
                 .then().statusCode(401)

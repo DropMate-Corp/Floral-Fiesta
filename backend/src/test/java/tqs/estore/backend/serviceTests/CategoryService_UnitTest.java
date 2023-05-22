@@ -16,7 +16,7 @@ import static org.mockito.Mockito.times;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(MockitoExtension.class)
-public class CategoryService_UnitTest {
+class CategoryService_UnitTest {
     @Mock
     private CategoryRepository categoryRepository;
 
@@ -26,7 +26,7 @@ public class CategoryService_UnitTest {
     private List<PlantCategory> categories;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         PlantCategory plantCategory = new PlantCategory();
         plantCategory.setCategoryId(1L);
         plantCategory.setName("Orchid");
@@ -41,12 +41,12 @@ public class CategoryService_UnitTest {
     }
 
     @AfterEach
-    public void tearDown() {
+    void tearDown() {
         categories = null;
     }
 
     @Test
-    public void whenGetAllCategories_thenReturnCategories() {
+    void whenGetAllCategories_thenReturnCategories() {
         when(categoryRepository.findAll()).thenReturn(categories);
         List<PlantCategory> foundCategories = categoryService.getAllCategories();
         assertThat(foundCategories).isEqualTo(categories);
@@ -54,7 +54,7 @@ public class CategoryService_UnitTest {
     }
 
     @Test
-    public void whenGetAllCategories_thenReturnEmptyList() {
+    void whenGetAllCategories_thenReturnEmptyList() {
         when(categoryRepository.findAll()).thenReturn(List.of());
         List<PlantCategory> foundCategories = categoryService.getAllCategories();
         assertThat(foundCategories).isEqualTo(List.of());

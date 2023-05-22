@@ -19,7 +19,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class UserService_UnitTest {
+class UserService_UnitTest {
     @Mock
     private UserRepository userRepository;
 
@@ -44,7 +44,7 @@ public class UserService_UnitTest {
     }
 
     @Test
-    public void whenRegisterValidUser_thenReturnUser () throws DuplicatedEmailException {
+    void whenRegisterValidUser_thenReturnUser () throws DuplicatedEmailException {
         when(userRepository.save(any(User.class))).thenReturn(user);
         when(userRepository.findByEmail(user.getEmail())).thenReturn(null);
         User savedUser = userService.registerUser(user.getName(), user.getEmail(), user.getPassword(), user.getPhoneNumber(), user.getAddress());
@@ -62,7 +62,7 @@ public class UserService_UnitTest {
     }
 
     @Test
-    public void whenRegisterInvalidUser_thenThrowDuplicatedEmailException () {
+    void whenRegisterInvalidUser_thenThrowDuplicatedEmailException () {
         when(userRepository.findByEmail(user.getEmail())).thenReturn(user);
         User user2 = new User();
         user2.setName("User2");
@@ -80,7 +80,7 @@ public class UserService_UnitTest {
     }
 
     @Test
-    public void whenLoginValidUser_thenReturnUser () throws InvalidCredentialsException {
+    void whenLoginValidUser_thenReturnUser () throws InvalidCredentialsException {
         when(userRepository.findByEmail(user.getEmail())).thenReturn(user);
         User loggedUser = userService.loginUser(user.getEmail(), user.getPassword());
 
@@ -95,7 +95,7 @@ public class UserService_UnitTest {
     }
 
     @Test
-    public void whenLoginWithInvalidEmail_thenThrowInvalidCredentialsException () {
+    void whenLoginWithInvalidEmail_thenThrowInvalidCredentialsException () {
         when(userRepository.findByEmail(user.getEmail())).thenReturn(null);
 
         assertThatThrownBy(() -> userService.loginUser(user.getEmail(), user.getPassword()))
@@ -106,7 +106,7 @@ public class UserService_UnitTest {
     }
 
     @Test
-    public void whenLoginWithInvalidPassword_thenThrowInvalidCredentialsException () {
+    void whenLoginWithInvalidPassword_thenThrowInvalidCredentialsException () {
         when(userRepository.findByEmail(user.getEmail())).thenReturn(user);
 
         assertThatThrownBy(() -> userService.loginUser(user.getEmail(), "invalidPassword"))

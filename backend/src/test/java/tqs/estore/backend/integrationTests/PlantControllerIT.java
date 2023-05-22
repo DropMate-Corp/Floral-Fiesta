@@ -22,7 +22,7 @@ import static org.hamcrest.Matchers.is;
 @Testcontainers
 @TestPropertySource(properties = {"spring.jpa.hibernate.ddl-auto=create-drop"})
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class PlantControllerIT {
+class PlantControllerIT {
 
     private final String BASE_URL = "http://localhost:";
 
@@ -102,7 +102,7 @@ public class PlantControllerIT {
 
 
     @Test
-    public void whenGetAllPlants_thenReturnPlants_andStatus200(){
+    void whenGetAllPlants_thenReturnPlants_andStatus200(){
         RestAssured.with().contentType("application/json")
                 .when().get(BASE_URL + port + "/floralfiesta/plant/all")
                 .then().statusCode(200)
@@ -128,7 +128,7 @@ public class PlantControllerIT {
     }
 
     @Test
-    public void whenGetAllPlants_thenReturnsEmptyList_andStatus200(){
+    void whenGetAllPlants_thenReturnsEmptyList_andStatus200(){
         plantRepository.deleteAll();
         RestAssured.with().contentType("application/json")
                 .when().get(BASE_URL + port + "/floralfiesta/plant/all")
@@ -137,7 +137,7 @@ public class PlantControllerIT {
     }
 
     @Test
-    public void whenGetPlantsByName_thenReturnPlants_andStatus200() {
+    void whenGetPlantsByName_thenReturnPlants_andStatus200() {
         RestAssured.with().contentType("application/json")
                 .when().get(BASE_URL + port + "/floralfiesta/plant/name/Orchid")
                 .then().statusCode(200)
@@ -157,7 +157,7 @@ public class PlantControllerIT {
     }
 
     @Test
-    public void whenGetPlantsByName_thenReturnEmptyList_andStatus200() {
+    void whenGetPlantsByName_thenReturnEmptyList_andStatus200() {
         RestAssured.with().contentType("application/json")
                 .when().get(BASE_URL + port + "/floralfiesta/plant/name/Orchiddd")
                 .then().statusCode(200)
@@ -165,7 +165,7 @@ public class PlantControllerIT {
     }
 
     @Test
-    public void whenGetPlantsByCategory_thenReturnPlants_andStatus200() {
+    void whenGetPlantsByCategory_thenReturnPlants_andStatus200() {
         RestAssured.with().contentType("application/json")
                 .when().get(BASE_URL + port + "/floralfiesta/plant/category/" + plantCategory.getCategoryId())
                 .then().statusCode(200)
@@ -185,7 +185,7 @@ public class PlantControllerIT {
     }
 
     @Test
-    public void whenGetPlantsByCategory_thenReturnEmptyList_andStatus200() {
+    void whenGetPlantsByCategory_thenReturnEmptyList_andStatus200() {
         RestAssured.with().contentType("application/json")
                 .when().get(BASE_URL + port + "/floralfiesta/plant/category/999")
                 .then().statusCode(200)
