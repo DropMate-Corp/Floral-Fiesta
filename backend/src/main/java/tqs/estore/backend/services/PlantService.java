@@ -24,6 +24,12 @@ public class PlantService {
         return plantRepository.findAll();
     }
 
+    /**
+     * Get plant from floralfiesta database by id
+     * @param id - id of the plant
+     * @return Plant
+     * @throws PlantNotFoundException - if plant with id is not found
+     */
     public Plant getPlantById(Long id) throws PlantNotFoundException {
         Optional<Plant> plant = plantRepository.findById(id);
         if(plant.isPresent()){
