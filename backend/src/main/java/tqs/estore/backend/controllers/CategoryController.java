@@ -1,5 +1,6 @@
 package tqs.estore.backend.controllers;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,7 +23,7 @@ public class CategoryController {
 
     @GetMapping("/all")
     public ResponseEntity<List<PlantCategory>> getAllCategories(){
-        return null;
+        return new ResponseEntity<>(categoryService.getAllCategories(), HttpStatus.OK);
     }
 
 }
