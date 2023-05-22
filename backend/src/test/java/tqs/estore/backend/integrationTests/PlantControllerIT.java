@@ -38,6 +38,8 @@ class PlantControllerIT {
 
     private PlantCategory plantCategory;
 
+    private Plant plant;
+
     @Container
     private static final MySQLContainer mySQLContainer = new MySQLContainer("mysql:latest")
             .withUsername("springuser")
@@ -86,7 +88,7 @@ class PlantControllerIT {
         plant3.setDescription("Spice Orchid is from the Orchid family.");
         plant3.setCategory(plantCategory);
 
-        plantRepository.saveAndFlush(plant1);
+        plant = plantRepository.saveAndFlush(plant1);
         plantRepository.saveAndFlush(plant2);
         plantRepository.saveAndFlush(plant3);
 
@@ -191,5 +193,27 @@ class PlantControllerIT {
                 .then().statusCode(200)
                 .body("size()", is(0));
     }
+
+    @Test
+    void whenGetPlantById_thenReturnPlant_andStatus200() {
+        RestAssured.with().contentType("application/json")
+                .when().get(BASE_URL + port + "/floralfiesta/plant/" + plant.getPlantId())
+                .then().statusCode(200)
+                .body("name", equalTo("Orchid")).and()
+                .body("price", equalTo(12.0f)).and()
+                .body("photo", equalTo("orchid.jpg")).and()
+                .body("description", equalTo("Orchid is a plant that is very beautiful.")).and()
+                .body("category.name", equalTo("Orchid")).and()
+                .body("category.photo", equalTo("orchid.jpg"));
+    }
+
+    @Test
+    void whenGetPlantById_thenReturnNull_andStatus404() {
+        RestAssured.with().contentType("application/json")
+                .when().get(BASE_URL + port + "/floralfiesta/plant/999")
+                .then().statusCode(404)
+                .body("message", equalTo("Plant was not found with provided id."));
+    }
+
 
 }
