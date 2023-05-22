@@ -22,7 +22,7 @@ public class ACPController {
 
     @GetMapping("/all")
     public ResponseEntity<List<Map<String, String>>> getAllACPs(){
-        return null;
+        return new ResponseEntity<>(acpService.getAllACPs(), org.springframework.http.HttpStatus.OK);
     }
 
 }
