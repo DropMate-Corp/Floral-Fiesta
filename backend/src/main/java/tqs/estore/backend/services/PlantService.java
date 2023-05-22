@@ -2,9 +2,11 @@ package tqs.estore.backend.services;
 
 import org.springframework.stereotype.Service;
 import tqs.estore.backend.datamodel.Plant;
+import tqs.estore.backend.exceptions.PlantNotFoundException;
 import tqs.estore.backend.repositories.PlantRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PlantService {
@@ -22,8 +24,18 @@ public class PlantService {
         return plantRepository.findAll();
     }
 
-    public Plant getPlantById(Long id){
-        return null;
+    /**
+     * Get plant from floralfiesta database by id
+     * @param id - id of the plant
+     * @return Plant
+     * @throws PlantNotFoundException - if plant with id is not found
+     */
+    public Plant getPlantById(Long id) throws PlantNotFoundException {
+        Optional<Plant> plant = plantRepository.findById(id);
+        if(plant.isPresent()){
+            return plant.get();
+        }
+        throw new PlantNotFoundException();
     }
 
     /**
