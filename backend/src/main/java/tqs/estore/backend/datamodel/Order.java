@@ -38,6 +38,9 @@ public class Order {
     @Temporal(TemporalType.DATE)
     private Date pickupDate;
 
+    @Column
+    private Integer acpID;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userId", nullable = false)
     private User user;
