@@ -179,4 +179,21 @@ class PlantController_withMockServiceTest {
 
         verify(plantService, times(1)).getPlantsByCategory(3);
     }
+
+    @Test
+    void whenGetPlantById_thenReturnPlant_andStatus200() throws Exception {
+        Plant plant1 = plants.get(0);
+
+        when(plantService.getPlantById(1L)).thenReturn(plant1);
+
+        mockMvc.perform(get("/floralfiesta/plant/1"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name").value(plant1.getName()))
+                .andExpect(jsonPath("$.price").value(plant1.getPrice()))
+                .andExpect(jsonPath("$.photo").value(plant1.getPhoto()))
+                .andExpect(jsonPath("$.description").value(plant1.getDescription()))
+                .andExpect(jsonPath("$.category.name").value(plant1.getCategory().getName()));
+
+        verify(plantService, times(1)).getPlantById(1L);
+    }
 }
