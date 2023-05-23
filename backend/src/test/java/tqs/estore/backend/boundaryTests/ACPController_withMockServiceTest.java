@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 import static org.hamcrest.Matchers.hasSize;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -72,6 +72,8 @@ public class ACPController_withMockServiceTest {
                 .andExpect(jsonPath("$[1].name").value(acps.get(1).get("name")))
                 .andExpect(jsonPath("$[1].city").value(acps.get(1).get("city")))
                 .andExpect(jsonPath("$[1].address").value(acps.get(1).get("address")));
+
+        verify(acpService, times(1)).getAllACPs();
     }
 
     @Test
@@ -80,6 +82,8 @@ public class ACPController_withMockServiceTest {
         mockMvc.perform(get("/floralfiesta/acp/all"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(0)));
+
+        verify(acpService, times(1)).getAllACPs();
     }
 
 }
