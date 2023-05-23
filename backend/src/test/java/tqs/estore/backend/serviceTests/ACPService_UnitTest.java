@@ -90,7 +90,7 @@ public class ACPService_UnitTest {
 
     @Test
     void whenGetAllACPs_thenReturnEmptyList() throws URISyntaxException, ParseException, IOException {
-        when(httpClient.getAvaiableACP()).thenReturn(null);
+        when(httpClient.getAvaiableACP()).thenReturn(new JSONArray());
 
         List<Map<String, String>> acpsList = acpService.getAllACPs();
 
