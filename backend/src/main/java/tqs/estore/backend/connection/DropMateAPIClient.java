@@ -52,14 +52,10 @@ public class DropMateAPIClient  {
 
     public JSONArray getAvaiableACP() throws URISyntaxException, ParseException, IOException {
         URIBuilder builder = new URIBuilder(BASE_URL + "/acp");
+        builder.addParameter("storeID", "1");
         String url = builder.build().toString();
         String response = doHttpGet(url);
         return (JSONArray) new JSONParser().parse(response);
     }
-
-
-
-
-
 
 }
