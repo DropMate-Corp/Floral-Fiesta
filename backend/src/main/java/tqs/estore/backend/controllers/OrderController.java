@@ -3,6 +3,7 @@ package tqs.estore.backend.controllers;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tqs.estore.backend.datamodel.Order;
+import tqs.estore.backend.datamodel.OrderDTO;
 import tqs.estore.backend.services.OrderService;
 
 import java.util.List;
@@ -18,7 +19,7 @@ public class OrderController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<Order> createOrder(@RequestBody Order order){
+    public ResponseEntity<Order> createOrder(@RequestBody OrderDTO order){
         return null;
     }
 

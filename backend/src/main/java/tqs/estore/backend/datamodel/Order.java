@@ -48,6 +48,6 @@ public class Order {
     @ElementCollection
     @CollectionTable(name = "order_plant_quantity", joinColumns = @JoinColumn(name="orderId"))
     @MapKeyJoinColumn(name = "quantity")
-    private Map<Plant, Integer> plantQualityMap;
+    private Map<Plant, Integer> plantQuanityMap;
 
 }

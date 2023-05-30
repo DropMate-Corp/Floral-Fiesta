@@ -1,6 +1,5 @@
 package tqs.estore.backend.services;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import tqs.estore.backend.datamodel.Order;
 import tqs.estore.backend.repositories.OrderRepository;
@@ -15,19 +14,19 @@ public class OrderService {
         this.orderRepository = orderRepository;
     }
 
-    public ResponseEntity<Order> createOrder(Order order) {
+    public Order createOrder(Order order) {
         return null;
     }
 
-    public ResponseEntity<Order> getOrderById(Long orderId) {
+    public Order getOrderById(Long orderId) {
         return null;
     }
 
-    public ResponseEntity<List<Order>> getOnGoingOrders(Long userId) {
+    public List<Order> getOnGoingOrders(Long userId) {
         return null;
     }
 
-    public ResponseEntity<List<Order>> getDeliveredOrders(Long userId) {
+    public List<Order> getDeliveredOrders(Long userId) {
         return null;
     }
 }
