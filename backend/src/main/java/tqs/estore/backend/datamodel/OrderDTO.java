@@ -13,5 +13,5 @@ public class OrderDTO {
     private Double totalPrice;
     private Integer acpID;
     private Long userId;
-    private Map<Long, Integer> plantQuanityMap;
+    private Map<Long, Integer> plantQuantityMap;
 }

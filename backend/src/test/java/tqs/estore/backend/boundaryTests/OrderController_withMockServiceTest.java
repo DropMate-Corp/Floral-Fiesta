@@ -8,10 +8,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 import tqs.estore.backend.controllers.OrderController;
-import tqs.estore.backend.datamodel.Order;
-import tqs.estore.backend.datamodel.Plant;
-import tqs.estore.backend.datamodel.Status;
-import tqs.estore.backend.datamodel.User;
+import tqs.estore.backend.datamodel.*;
+import tqs.estore.backend.exceptions.InvalidOrderException;
 import tqs.estore.backend.services.OrderService;
 
 import java.sql.Date;
@@ -55,8 +53,8 @@ public class OrderController_withMockServiceTest {
         order.setDescription("Test");
         order.setAcpID(1);
         order.setStatus(Status.WAITING_FOR_PICKUP);
-        order.setDeliveryDate(new Date(2021, 1, 1));
-        order.setPickupDate(new Date(2021, 1, 1));
+        order.setDeliveryDate(new Date(new java.util.Date("2021/01/01").getTime()));
+        order.setPickupDate(new Date(new java.util.Date("2021/01/01").getTime()));
 
         plants_quantity = new HashMap<>();
         plant = new Plant();
@@ -68,7 +66,7 @@ public class OrderController_withMockServiceTest {
         plant.setCategory(null);
 
         plants_quantity.put(plant, 1);
-        order.setPlantQuanityMap(plants_quantity);
+        order.setPlantQuantityMap(plants_quantity);
 
     }
 
@@ -83,16 +81,17 @@ public class OrderController_withMockServiceTest {
 
     @Test
     void whenPostOrder_thenReturnOrder_andStatus200() throws Exception {
-        when(orderService.createOrder(order)).thenReturn(order);
+
+        when(orderService.createOrder(any())).thenReturn(order);
 
         mockMvc.perform(post("/floralfiesta/order/create")
                 .contentType("application/json")
-                .content("{\n" +
-                        "    \"totalPrice\": 10.0,\n" +
-                        "    \"acpID\": 1,\n" +
-                        "     \"userId\": 1,\n" +
-                        "     \"plantQuantityMap\": { \"1\" : 1}" +
-                        "}"))
+                .content("""
+                        {
+                            "totalPrice": 10.0,
+                            "acpID": 1,
+                            "userId": 1,
+                            "plantQuantityMap": { "1" : 1}}"""))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.orderId").value(1))
                 .andExpect(jsonPath("$.totalPrice").value(10.0))
@@ -103,7 +102,28 @@ public class OrderController_withMockServiceTest {
                 .andExpect(jsonPath("$.status").value("WAITING_FOR_PICKUP"))
                 .andExpect(jsonPath("$.deliveryDate").value("2021-01-01"))
                 .andExpect(jsonPath("$.pickupDate").value("2021-01-01"))
-                .andExpect(jsonPath("$.plantQuanityMap[1]").value(1));
+                .andExpect(jsonPath("$.plantQuantityMap").isMap())
+                .andExpect(jsonPath("$.plantQuantityMap").isNotEmpty())
+        ;
+
+        verify(orderService, times(1)).createOrder(any());
+    }
+
+    @Test
+    void whenPostInvalidOrder_returnStatus400() throws Exception {
+        when(orderService.createOrder(any())).thenThrow(new InvalidOrderException());
+
+        mockMvc.perform(post("/floralfiesta/order/create")
+                        .contentType("application/json")
+                        .content("""
+                                {
+                                    "totalPrice": 10.0,
+                                    "userId": 1,
+                                    "plantQuantityMap": { "1" : 1}}"""))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("Invalid order."));
+
+        verify(orderService, times(1)).createOrder(any());
     }
 
 

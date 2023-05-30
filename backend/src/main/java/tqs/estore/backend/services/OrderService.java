@@ -2,6 +2,8 @@ package tqs.estore.backend.services;
 
 import org.springframework.stereotype.Service;
 import tqs.estore.backend.datamodel.Order;
+import tqs.estore.backend.datamodel.OrderDTO;
+import tqs.estore.backend.exceptions.InvalidOrderException;
 import tqs.estore.backend.repositories.OrderRepository;
 
 import java.util.List;
@@ -14,7 +16,7 @@ public class OrderService {
         this.orderRepository = orderRepository;
     }
 
-    public Order createOrder(Order order) {
+    public Order createOrder(OrderDTO order) throws InvalidOrderException {
         return null;
     }
 
