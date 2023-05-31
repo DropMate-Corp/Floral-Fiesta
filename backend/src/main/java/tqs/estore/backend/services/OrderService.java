@@ -40,12 +40,20 @@ public class OrderService {
         Long userId = order.getUserId();
         Map<Long, Integer> plantQuantityMap = order.getPlantQuantityMap();
 
+        System.out.println(totalPrice);
+        System.out.println(acpID);
+        System.out.println(userId);
+        System.out.println(plantQuantityMap);
+
+
         if (totalPrice == null || acpID == null || userId == null || plantQuantityMap == null) {
+            System.out.println("null");
             throw new InvalidOrderException();
         }
 
         User user = userRepository.findById(userId).orElse(null);
         if (user == null) {
+            System.out.println("user null");
             throw new InvalidOrderException();
         }
 
@@ -54,6 +62,7 @@ public class OrderService {
         for (Map.Entry<Long, Integer> entry : plantQuantityMap.entrySet()) {
             Plant plant = plantRepository.findById(entry.getKey()).orElse(null);
             if (plant == null) {
+                System.out.println("plant null");
                 throw new InvalidOrderException();
             }
             OrderItem orderItem = new OrderItem();
