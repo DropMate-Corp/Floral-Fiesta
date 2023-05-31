@@ -14,6 +14,7 @@ import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import tqs.estore.backend.datamodel.Plant;
 import tqs.estore.backend.datamodel.PlantCategory;
+import tqs.estore.backend.datamodel.Status;
 import tqs.estore.backend.datamodel.User;
 import tqs.estore.backend.repositories.*;
 
@@ -41,6 +42,9 @@ public class OrderControllerIT {
     @Autowired
     private PlantRepository plantRepository;
 
+    private User user;
+
+    private Plant plant;
 
     @Container
     private static final MySQLContainer mySQLContainer = new MySQLContainer("mysql:latest")
@@ -63,21 +67,21 @@ public class OrderControllerIT {
         plantCategory.setPhoto("orchid.jpg");
         plantCategory = categoryRepository.saveAndFlush(plantCategory);
 
-        Plant plant = new Plant();
+        plant = new Plant();
         plant.setName("Orchid");
         plant.setCategory(plantCategory);
         plant.setDescription("Orchid");
         plant.setPrice(10.0);
         plant.setPhoto("orchid.jpg");
-        plantRepository.saveAndFlush(plant);
+        plant = plantRepository.saveAndFlush(plant);
 
-        User user = new User();
+        user = new User();
         user.setName("user");
         user.setEmail("user@email.com");
         user.setPassword("password");
         user.setPhoneNumber(123456789);
         user.setAddress("address");
-        userRepository.saveAndFlush(user);
+        user = userRepository.saveAndFlush(user);
     }
 
     @AfterEach
@@ -89,6 +93,7 @@ public class OrderControllerIT {
         userRepository.deleteAll();
     }
 
+    @Order(1)
     @Test
     void whenPostOrder_thenReturnOrder_andStatus200() {
         RestAssured.given().contentType("application/json")
@@ -102,5 +107,60 @@ public class OrderControllerIT {
                 .body("totalPrice", org.hamcrest.Matchers.equalTo(10.0F))
                 .body("user.userId", org.hamcrest.Matchers.equalTo(1))
                 .body("acpID", org.hamcrest.Matchers.equalTo(1));
+    }
+
+
+    @Order(2)
+    @Test
+    void whenPostOrderWithInvalidUser_thenReturnError_andStatus400() {
+        RestAssured.given().contentType("application/json")
+                .body("{\"userId\": 2, \"plantQuantityMap\": {\"1\": 1}, \"acpID\": 1, \"totalPrice\": 10.0}")
+                .when()
+                .post(BASE_URL + port + "/floralfiesta/order/create")
+                .then()
+                .statusCode(400)
+                .assertThat()
+                .body("message", org.hamcrest.Matchers.equalTo("Invalid order."));
+    }
+
+
+
+    @Order(3)
+    @Test
+    void whenGetDeliveredOrders_thenReturnEmpty_andStatus200() {
+        RestAssured.given().contentType("application/json")
+                .when()
+                .get(BASE_URL + port + "/floralfiesta/order/delivered/1")
+                .then()
+                .statusCode(200)
+                .assertThat()
+                .body("size()", org.hamcrest.Matchers.equalTo(0));
+    }
+
+
+    @Order(4)
+    @Test
+    void whenGetDeliveredOrders_thenReturnOrders_andStatus200() {
+        tqs.estore.backend.datamodel.Order order = new tqs.estore.backend.datamodel.Order();
+        order.setUser(userRepository.findById(user.getUserId()).get());
+        order.setAcpID(1);
+        order.setTotalPrice(10.0);
+        order.setStatus(Status.DELIVERED);
+        order.setDescription("description");
+        order.setPickupCode("pickupCode");
+        order = orderRepository.saveAndFlush(order);
+
+
+        RestAssured.given().contentType("application/json")
+                .when()
+                .get(BASE_URL + port + "/floralfiesta/order/delivered/" + user.getUserId())
+                .then()
+                .statusCode(200)
+                .assertThat()
+                .body("size()", org.hamcrest.Matchers.equalTo(1))
+                .body("[0].orderId", org.hamcrest.Matchers.equalTo(order.getOrderId().intValue()))
+                .body("[0].totalPrice", org.hamcrest.Matchers.equalTo(order.getTotalPrice().floatValue()))
+                .body("[0].user.userId", org.hamcrest.Matchers.equalTo(order.getUser().getUserId().intValue()))
+                .body("[0].acpID", org.hamcrest.Matchers.equalTo(order.getAcpID()));
     }
 }

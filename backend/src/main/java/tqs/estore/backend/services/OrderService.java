@@ -92,6 +92,6 @@ public class OrderService {
     }
 
     public List<Order> getDeliveredOrders(Long userId) {
-        return null;
+        return orderRepository.findAllByUserUserIdAndStatus(userId, Status.DELIVERED);
     }
 }

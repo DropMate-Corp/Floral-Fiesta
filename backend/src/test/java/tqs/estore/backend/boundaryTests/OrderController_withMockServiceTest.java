@@ -15,11 +15,16 @@ import tqs.estore.backend.services.OrderService;
 import java.sql.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.List;
+import java.util.ArrayList;
 
 import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+
 @WebMvcTest(controllers = OrderController.class)
 public class OrderController_withMockServiceTest {
 
@@ -122,5 +127,51 @@ public class OrderController_withMockServiceTest {
         verify(orderService, times(1)).createOrder(any());
     }
 
+    @Test
+    void whenGetDeliveredOrders_thenReturnDeliveredOrders_andStatus200() throws Exception {
+        List<Order> orders = new ArrayList<>();
+        Order order2 = new Order();
+        order2.setOrderId(2L);
+        order2.setTotalPrice(20.0);
+        order2.setUser(user);
+        order2.setPickupCode("4321");
+        order2.setDescription("Test2");
+        order2.setAcpID(2);
+        order2.setStatus(Status.DELIVERED);
+        order2.setDeliveryDate(Date.valueOf("2021-01-01"));
+        order2.setPickupDate(Date.valueOf("2021-01-01"));
+
+        orders.add(order);
+
+        when(orderService.getDeliveredOrders(1L)).thenReturn(orders);
+
+        mockMvc.perform(get("/floralfiesta/order/delivered/1"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(1))
+                .andExpect(jsonPath("$[0].orderId").value(1))
+                .andExpect(jsonPath("$[0].totalPrice").value(10.0))
+                .andExpect(jsonPath("$[0].user.userId").value(1))
+                .andExpect(jsonPath("$[0].pickupCode").value(1234))
+                .andExpect(jsonPath("$[0].description").value("Test"))
+                .andExpect(jsonPath("$[0].acpID").value(1))
+                .andExpect(jsonPath("$[0].status").value("WAITING_FOR_PICKUP"))
+                .andExpect(jsonPath("$[0].deliveryDate").value("2021-01-01"))
+                .andExpect(jsonPath("$[0].pickupDate").value("2021-01-01"));
+
+        verify(orderService, times(1)).getDeliveredOrders(1L);
+    }
+
+    @Test
+    void whenGetDeliveredOrders_thenReturnEmptyList_andStatus200() throws Exception {
+        List<Order> orders = new ArrayList<>();
+
+        when(orderService.getDeliveredOrders(1L)).thenReturn(orders);
+
+        mockMvc.perform(get("/floralfiesta/order/delivered/1"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(0));
+
+        verify(orderService, times(1)).getDeliveredOrders(1L);
+    }
 
 }
