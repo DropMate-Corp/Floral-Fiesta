@@ -16,7 +16,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("floralfiesta/order")
-@CrossOrigin(origins = "*", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE, RequestMethod.OPTIONS})
+@CrossOrigin
 public class OrderController {
     private final OrderService orderService;
 

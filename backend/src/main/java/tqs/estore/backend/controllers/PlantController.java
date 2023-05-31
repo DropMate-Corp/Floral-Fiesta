@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("floralfiesta/plant")
-@CrossOrigin(origins = "*", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE, RequestMethod.OPTIONS})
+@CrossOrigin
 public class PlantController {
     private final PlantService plantService;
 
