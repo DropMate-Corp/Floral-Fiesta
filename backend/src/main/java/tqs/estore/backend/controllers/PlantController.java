@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("floralfiesta/plant")
-@CrossOrigin
+@CrossOrigin(origins = "https://dropmate-corp.github.io/Floral-Fiesta-UI/")
 public class PlantController {
     private final PlantService plantService;
 
