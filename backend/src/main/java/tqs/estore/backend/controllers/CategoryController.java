@@ -2,10 +2,7 @@ package tqs.estore.backend.controllers;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import tqs.estore.backend.datamodel.PlantCategory;
 import tqs.estore.backend.services.CategoryService;
 
@@ -13,7 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("floralfiesta/category")
-@CrossOrigin(origins = "https://dropmate-corp.github.io/Floral-Fiesta-UI/")
+@CrossOrigin(origins = "https://dropmate-corp.github.io/Floral-Fiesta-UI/", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE, RequestMethod.OPTIONS})
 public class CategoryController {
     private final CategoryService categoryService;
 

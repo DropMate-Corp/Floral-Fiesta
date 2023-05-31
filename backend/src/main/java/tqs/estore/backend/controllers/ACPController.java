@@ -2,10 +2,7 @@ package tqs.estore.backend.controllers;
 
 import org.json.simple.parser.ParseException;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import tqs.estore.backend.services.ACPService;
 
 import java.io.IOException;
@@ -15,7 +12,8 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("floralfiesta/acp")
-@CrossOrigin(origins = "https://dropmate-corp.github.io/Floral-Fiesta-UI/")
+@CrossOrigin(origins = "https://dropmate-corp.github.io/Floral-Fiesta-UI/", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE, RequestMethod.OPTIONS})
+
 public class ACPController {
     private final ACPService acpService;
 
