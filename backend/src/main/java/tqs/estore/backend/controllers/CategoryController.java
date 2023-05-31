@@ -13,7 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("floralfiesta/category")
-@CrossOrigin
+@CrossOrigin(origins = "https://dropmate-corp.github.io/Floral-Fiesta-UI/")
 public class CategoryController {
     private final CategoryService categoryService;
 

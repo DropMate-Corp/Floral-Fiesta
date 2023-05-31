@@ -15,7 +15,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("floralfiesta/acp")
-@CrossOrigin
+@CrossOrigin(origins = "https://dropmate-corp.github.io/Floral-Fiesta-UI/")
 public class ACPController {
     private final ACPService acpService;
 

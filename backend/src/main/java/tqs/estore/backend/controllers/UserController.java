@@ -10,7 +10,7 @@ import tqs.estore.backend.services.UserService;
 
 @RestController
 @RequestMapping("floralfiesta/user")
-@CrossOrigin
+@CrossOrigin(origins = "https://dropmate-corp.github.io/Floral-Fiesta-UI/")
 public class UserController {
 
     private final UserService userService;
