@@ -268,7 +268,7 @@ public class OrderService_UnitTest {
         assertThat(ordersResponse.get(0)).isEqualTo(order2);
 
         verify(orderRepository, times(1)).findAllByUserUserIdAndStatus(1L, Status.IN_DELIVERY);
-        verify(orderRepository, times(0)).findAllByUserUserIdAndStatus(1L, Status.WAITING_FOR_PICKUP);
+        verify(orderRepository, times(1)).findAllByUserUserIdAndStatus(1L, Status.WAITING_FOR_PICKUP);
     }
 
 

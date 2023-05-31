@@ -85,11 +85,17 @@ public class OrderService {
     }
 
     public Order getOrderById(Long orderId) throws OrderNotFoundException {
-        return null;
+        Optional<Order> order = orderRepository.findById(orderId);
+        if (order.isPresent()) {
+            return order.get();
+        }
+        throw new OrderNotFoundException();
     }
 
     public List<Order> getOnGoingOrders(Long userId) {
-        return null;
+        List<Order> orders = orderRepository.findAllByUserUserIdAndStatus(userId, Status.IN_DELIVERY);
+        orders.addAll(orderRepository.findAllByUserUserIdAndStatus(userId, Status.WAITING_FOR_PICKUP));
+        return orders;
     }
 
     public List<Order> getDeliveredOrders(Long userId) {
