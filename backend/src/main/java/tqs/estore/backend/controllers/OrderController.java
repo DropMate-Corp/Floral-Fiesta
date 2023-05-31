@@ -40,7 +40,7 @@ public class OrderController {
 
     @GetMapping("/delivered/{userId}")
     public ResponseEntity<List<Order>> getDeliveredOrders(@PathVariable Long userId){
-        return null;
+        return new ResponseEntity<>(orderService.getDeliveredOrders(userId), HttpStatus.OK);
     }
 
 }
