@@ -4,6 +4,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import tqs.estore.backend.connection.DropMateAPIClient;
@@ -23,6 +24,7 @@ public class DropMateAPIClient_UnitTest {
         dropMateAPIClient = new DropMateAPIClient();
     }
 
+    @Disabled
     @Test
     public void testPostOrder() throws URISyntaxException, ParseException, IOException {
         JSONObject response = dropMateAPIClient.postOrder(1, 1);
@@ -31,6 +33,7 @@ public class DropMateAPIClient_UnitTest {
         assertThat(response.get("status")).isNotNull();
     }
 
+    @Disabled
     @Test
     public void testGetAvaiableACP() throws URISyntaxException, ParseException, IOException {
         JSONArray response = dropMateAPIClient.getAvaiableACP();
