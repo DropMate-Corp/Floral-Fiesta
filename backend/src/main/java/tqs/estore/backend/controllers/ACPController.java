@@ -12,7 +12,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("floralfiesta/acp")
-@CrossOrigin(origins = "*")
+@CrossOrigin
 public class ACPController {
     private final ACPService acpService;
 
