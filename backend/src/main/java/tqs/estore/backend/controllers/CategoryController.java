@@ -10,7 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("floralfiesta/category")
-@CrossOrigin
+@CrossOrigin(origins = "*")
 public class CategoryController {
     private final CategoryService categoryService;
 
