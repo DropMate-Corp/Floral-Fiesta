@@ -19,7 +19,7 @@ import java.net.URISyntaxException;
 
 @Component
 public class DropMateAPIClient  {
-    private final String BASE_URL = "http://localhost:8080/dropmate/estore_api";
+    private final String BASE_URL = "https://dropmateapi.azurewebsites.net/dropmate/estore_api";
 
     public String doHttpPost(String url) throws IOException {
         CloseableHttpClient client = HttpClients.createDefault();
