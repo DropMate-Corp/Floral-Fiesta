@@ -163,4 +163,77 @@ public class OrderControllerIT {
                 .body("[0].user.userId", org.hamcrest.Matchers.equalTo(order.getUser().getUserId().intValue()))
                 .body("[0].acpID", org.hamcrest.Matchers.equalTo(order.getAcpID()));
     }
+
+
+    @Test
+    void whenGetOrderById_thenReturnOrder_andStatus200() {
+        tqs.estore.backend.datamodel.Order order = new tqs.estore.backend.datamodel.Order();
+        order.setUser(userRepository.findById(user.getUserId()).get());
+        order.setAcpID(1);
+        order.setTotalPrice(10.0);
+        order.setStatus(Status.DELIVERED);
+        order.setDescription("description");
+        order.setPickupCode("pickupCode");
+        order = orderRepository.saveAndFlush(order);
+
+        RestAssured.given().contentType("application/json")
+                .when()
+                .get(BASE_URL + port + "/floralfiesta/order/" + order.getOrderId())
+                .then()
+                .statusCode(200)
+                .assertThat()
+                .body("orderId", org.hamcrest.Matchers.equalTo(order.getOrderId().intValue()))
+                .body("totalPrice", org.hamcrest.Matchers.equalTo(order.getTotalPrice().floatValue()))
+                .body("user.userId", org.hamcrest.Matchers.equalTo(order.getUser().getUserId().intValue()))
+                .body("acpID", org.hamcrest.Matchers.equalTo(order.getAcpID()));
+    }
+
+
+    @Test
+    void whenGetOrderById_thenReturnError_andStatus404() {
+        RestAssured.given().contentType("application/json")
+                .when()
+                .get(BASE_URL + port + "/floralfiesta/order/999")
+                .then()
+                .statusCode(404)
+                .assertThat()
+                .body("message", org.hamcrest.Matchers.equalTo("Order not found."));
+    }
+
+
+    @Test
+    void whenGetOnGoingOrders_thenReturnOnGoingOrders_andStatus200(){
+        tqs.estore.backend.datamodel.Order order = new tqs.estore.backend.datamodel.Order();
+        order.setUser(userRepository.findById(user.getUserId()).get());
+        order.setAcpID(1);
+        order.setTotalPrice(10.0);
+        order.setStatus(Status.WAITING_FOR_PICKUP);
+        order.setDescription("description");
+        order.setPickupCode("pickupCode");
+        order = orderRepository.saveAndFlush(order);
+
+        RestAssured.given().contentType("application/json")
+                .when()
+                .get(BASE_URL + port + "/floralfiesta/order/ongoing/" + user.getUserId())
+                .then()
+                .statusCode(200)
+                .assertThat()
+                .body("size()", org.hamcrest.Matchers.equalTo(1))
+                .body("[0].orderId", org.hamcrest.Matchers.equalTo(order.getOrderId().intValue()))
+                .body("[0].totalPrice", org.hamcrest.Matchers.equalTo(order.getTotalPrice().floatValue()))
+                .body("[0].user.userId", org.hamcrest.Matchers.equalTo(order.getUser().getUserId().intValue()))
+                .body("[0].acpID", org.hamcrest.Matchers.equalTo(order.getAcpID()));
+    }
+
+    @Test
+    void whenGetOnGoingOrders_thenReturnEmpty_andStatus200(){
+        RestAssured.given().contentType("application/json")
+                .when()
+                .get(BASE_URL + port + "/floralfiesta/order/ongoing/" + user.getUserId())
+                .then()
+                .statusCode(200)
+                .assertThat()
+                .body("size()", org.hamcrest.Matchers.equalTo(0));
+    }
+
 }
