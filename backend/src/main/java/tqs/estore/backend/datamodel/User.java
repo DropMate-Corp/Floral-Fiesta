@@ -1,12 +1,10 @@
 package tqs.estore.backend.datamodel;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
-import java.util.List;
 
 @Entity
-@Table
+@Table(name = "users")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -14,7 +12,7 @@ import java.util.List;
 @ToString
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
 
     @Column(nullable = false)
@@ -31,9 +29,5 @@ public class User {
 
     @Column(nullable = false)
     private String address;
-
-    @JsonIgnore
-    @OneToMany(mappedBy = "user")
-    private List<Order> orders;
 
 }

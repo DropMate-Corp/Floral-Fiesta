@@ -10,6 +10,13 @@ import java.util.Date;
 
 @RestControllerAdvice
 public class GlobalExceptionHandlerController {
+
+    @ExceptionHandler(InvalidOrderException.class)
+    public ResponseEntity<?> invalidOrderException(InvalidOrderException ex, WebRequest request) {
+        ErrorDetails errorDetails = new ErrorDetails(new Date(), ex.getMessage(), request.getDescription(false));
+        return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(DuplicatedEmailException.class)
     public ResponseEntity<?> duplicatedEmailException(DuplicatedEmailException ex, WebRequest request) {
         ErrorDetails errorDetails = new ErrorDetails(new Date(), ex.getMessage(), request.getDescription(false));

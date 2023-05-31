@@ -4,18 +4,17 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.sql.Date;
-import java.util.Map;
 
 @Entity
-@Table
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
+@Table(name = "orders")
 public class Order {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long orderId;
 
     @Column(nullable = false)
@@ -38,13 +37,11 @@ public class Order {
     @Temporal(TemporalType.DATE)
     private Date pickupDate;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @Column
+    private Integer acpID;
+
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "userId", nullable = false)
     private User user;
-
-    @ElementCollection
-    @CollectionTable(name = "order_plant_quantity", joinColumns = @JoinColumn(name="orderId"))
-    @MapKeyJoinColumn(name = "quantity")
-    private Map<Plant, Integer> plantQualityMap;
 
 }

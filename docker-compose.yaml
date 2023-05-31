@@ -6,7 +6,7 @@ services:
       context: ./backend
       dockerfile: Dockerfile
     ports:
-      - '8080:8080'
+      - '8081:8080'
     depends_on:
       - mysql
     networks:
@@ -23,6 +23,9 @@ services:
         MYSQL_USER: springuser
         MYSQL_PASSWORD: password
         MYSQL_ROOT_PASSWORD: root
+
+    volumes:
+      - ./database:/docker-entrypoint-initdb.d/:ro
     networks:
         - net
 

@@ -1,11 +1,11 @@
 package tqs.estore.backend.datamodel;
 
-
 import jakarta.persistence.*;
 import lombok.*;
 
+
 @Entity
-@Table
+@Table(name = "plants")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -14,7 +14,7 @@ import lombok.*;
 public class Plant {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long plantId;
 
     @Column(nullable = false)
@@ -32,4 +32,5 @@ public class Plant {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "categoryId", nullable = false)
     private PlantCategory category;
+
 }
