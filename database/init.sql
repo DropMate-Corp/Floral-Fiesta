@@ -16,159 +16,139 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `order_plant_quantity`
+-- Table structure for table `order_items`
 --
 
-DROP TABLE IF EXISTS `order_plant_quantity`;
+DROP TABLE IF EXISTS `order_items`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `order_plant_quantity` (
-  `order_id` bigint NOT NULL,
-  `plant_quality_map` int DEFAULT NULL,
-  `quantity` bigint NOT NULL,
-  PRIMARY KEY (`order_id`,`quantity`),
-  KEY `FKrjdb9r7q5roywg5oiiy3uew5a` (`quantity`),
-  CONSTRAINT `FKrjdb9r7q5roywg5oiiy3uew5a` FOREIGN KEY (`quantity`) REFERENCES `plant` (`plant_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `order_plant_quantity`
---
-
-LOCK TABLES `order_plant_quantity` WRITE;
-/*!40000 ALTER TABLE `order_plant_quantity` DISABLE KEYS */;
-/*!40000 ALTER TABLE `order_plant_quantity` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `order_seq`
---
-
-DROP TABLE IF EXISTS `order_seq`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `order_seq` (
-  `next_val` bigint DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `order_seq`
---
-
-LOCK TABLES `order_seq` WRITE;
-/*!40000 ALTER TABLE `order_seq` DISABLE KEYS */;
-INSERT INTO `order_seq` VALUES (1);
-/*!40000 ALTER TABLE `order_seq` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `plant`
---
-
-DROP TABLE IF EXISTS `plant`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `plant` (
+CREATE TABLE `order_items` (
+  `order_item_id` bigint NOT NULL AUTO_INCREMENT,
+  `quantity` int NOT NULL,
+  `order_id` bigint DEFAULT NULL,
   `plant_id` bigint NOT NULL,
-  `description` varchar(255) NOT NULL,
-  `name` varchar(255) NOT NULL,
-  `photo` varchar(255) NOT NULL,
-  `price` double NOT NULL,
-  `category_id` bigint NOT NULL,
-  PRIMARY KEY (`plant_id`),
-  KEY `FK1cevxuhu9jtyiltoe48tkun6s` (`category_id`),
-  CONSTRAINT `FK1cevxuhu9jtyiltoe48tkun6s` FOREIGN KEY (`category_id`) REFERENCES `plant_category` (`category_id`)
+  PRIMARY KEY (`order_item_id`),
+  KEY `FKbioxgbv59vetrxe0ejfubep1w` (`order_id`),
+  KEY `FKh19tu3fmpiq6task47pamxkg8` (`plant_id`),
+  CONSTRAINT `FKbioxgbv59vetrxe0ejfubep1w` FOREIGN KEY (`order_id`) REFERENCES `orders` (`order_id`),
+  CONSTRAINT `FKh19tu3fmpiq6task47pamxkg8` FOREIGN KEY (`plant_id`) REFERENCES `plants` (`plant_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `plant`
+-- Dumping data for table `order_items`
 --
 
-LOCK TABLES `plant` WRITE;
-/*!40000 ALTER TABLE `plant` DISABLE KEYS */;
-/*!40000 ALTER TABLE `plant` ENABLE KEYS */;
+LOCK TABLES `order_items` WRITE;
+/*!40000 ALTER TABLE `order_items` DISABLE KEYS */;
+/*!40000 ALTER TABLE `order_items` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `plant_category`
+-- Table structure for table `orders`
 --
 
-DROP TABLE IF EXISTS `plant_category`;
+DROP TABLE IF EXISTS `orders`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `plant_category` (
-  `category_id` bigint NOT NULL,
+CREATE TABLE `orders` (
+  `order_id` bigint NOT NULL AUTO_INCREMENT,
+  `acpid` int DEFAULT NULL,
+  `delivery_date` date DEFAULT NULL,
+  `description` varchar(255) NOT NULL,
+  `pickup_code` varchar(255) NOT NULL,
+  `pickup_date` date DEFAULT NULL,
+  `status` int DEFAULT NULL,
+  `total_price` double NOT NULL,
+  `user_id` bigint NOT NULL,
+  PRIMARY KEY (`order_id`),
+  KEY `FK32ql8ubntj5uh44ph9659tiih` (`user_id`),
+  CONSTRAINT `FK32ql8ubntj5uh44ph9659tiih` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `orders`
+--
+
+LOCK TABLES `orders` WRITE;
+/*!40000 ALTER TABLE `orders` DISABLE KEYS */;
+/*!40000 ALTER TABLE `orders` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `plant_categories`
+--
+
+DROP TABLE IF EXISTS `plant_categories`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `plant_categories` (
+  `category_id` bigint NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   `photo` varchar(255) NOT NULL,
   PRIMARY KEY (`category_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `plant_category`
+INSERT INTO plant_categories (category_id, name, photo) VALUES (1, 'Flowering House Plants','https://assets.hgtv.ca/wp-content/uploads/2021/12/Kalanchoe-Plants-That-Flower-In-Winter-FT.jpg');
+INSERT INTO plant_categories (category_id,  name, photo) VALUES (2, 'Foliage Plants', 'https://www.gardendesign.com/pictures/images/675x529Max/site_3/colorful-foliage-plants-proven-winners_16616.jpg');
+INSERT INTO plant_categories (category_id, name, photo) VALUES (3, 'Bromeliads', 'https://www.gardeningknowhow.com/wp-content/uploads/2012/03/bromeliads-1.jpg');
+INSERT INTO plant_categories (category_id, name, photo) VALUES (4, 'Orchids', 'https://www.allaboutgardening.com/wp-content/uploads/2021/11/Types-of-Orchids-1200x667.jpg');
+
+
+-- Dumping data for table `plant_categories`
 --
 
-LOCK TABLES `plant_category` WRITE;
-/*!40000 ALTER TABLE `plant_category` DISABLE KEYS */;
-/*!40000 ALTER TABLE `plant_category` ENABLE KEYS */;
+LOCK TABLES `plant_categories` WRITE;
+/*!40000 ALTER TABLE `plant_categories` DISABLE KEYS */;
+/*!40000 ALTER TABLE `plant_categories` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `plant_category_seq`
+-- Table structure for table `plants`
 --
 
-DROP TABLE IF EXISTS `plant_category_seq`;
+DROP TABLE IF EXISTS `plants`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `plant_category_seq` (
-  `next_val` bigint DEFAULT NULL
+CREATE TABLE `plants` (
+  `plant_id` bigint NOT NULL AUTO_INCREMENT,
+  `description` varchar(255) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `photo` varchar(255) NOT NULL,
+  `price` double NOT NULL,
+  `category_id` bigint NOT NULL,
+  PRIMARY KEY (`plant_id`),
+  KEY `FKth574r1qvlom4o6qimpex1ahm` (`category_id`),
+  CONSTRAINT `FKth574r1qvlom4o6qimpex1ahm` FOREIGN KEY (`category_id`) REFERENCES `plant_categories` (`category_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+INSERT INTO plants (plant_id, description, name, photo, price, category_id) VALUES (1, 'Chenile Plant is so cool!', 'Chenile Plant', 'https://bs.plantnet.org/image/o/3c47e1574ef9846ae1782095a4252a112dc7c260', 9.0, 1);
+INSERT INTO plants (plant_id, description, name, photo, price, category_id) VALUES (2, 'Magic, you know.', 'Magic Flower', 'https://www.pacificbulbsociety.org/pbswiki/files/Achimenes/Achimenes_George_Houche_JS1.jpg', 5.0, 2);
+INSERT INTO plants (plant_id, description, name, photo, price, category_id) VALUES (3, 'Very patriotic.', 'Sweet Flag', 'https://www.everwilde.com/media/0800/FACOCAL-A-Sweet-Flag-Seeds.jpg', 11.0, 3);
+INSERT INTO plants (plant_id, description, name, photo, price, category_id) VALUES (4, 'Mini patriot', 'Miniature Sweet Flag', 'https://bs.plantnet.org/image/o/718ec737b1f6d56d3d0c80fe35159a6b4f235532', 20.0, 4);
+
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `plant_category_seq`
+-- Dumping data for table `plants`
 --
 
-LOCK TABLES `plant_category_seq` WRITE;
-/*!40000 ALTER TABLE `plant_category_seq` DISABLE KEYS */;
-INSERT INTO `plant_category_seq` VALUES (1);
-/*!40000 ALTER TABLE `plant_category_seq` ENABLE KEYS */;
+LOCK TABLES `plants` WRITE;
+/*!40000 ALTER TABLE `plants` DISABLE KEYS */;
+/*!40000 ALTER TABLE `plants` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `plant_seq`
+-- Table structure for table `users`
 --
 
-DROP TABLE IF EXISTS `plant_seq`;
+DROP TABLE IF EXISTS `users`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `plant_seq` (
-  `next_val` bigint DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `plant_seq`
---
-
-LOCK TABLES `plant_seq` WRITE;
-/*!40000 ALTER TABLE `plant_seq` DISABLE KEYS */;
-INSERT INTO `plant_seq` VALUES (1);
-/*!40000 ALTER TABLE `plant_seq` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `user`
---
-
-DROP TABLE IF EXISTS `user`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `user` (
-  `user_id` bigint NOT NULL,
+CREATE TABLE `users` (
+  `user_id` bigint NOT NULL AUTO_INCREMENT,
   `address` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL,
   `name` varchar(255) NOT NULL,
@@ -176,38 +156,18 @@ CREATE TABLE `user` (
   `phone_number` int NOT NULL,
   PRIMARY KEY (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+INSERT INTO users (user_id, address, email, name, password, phone_number) VALUES (1, '123 Main St', 'user@email.com', 'User', 'password', 123456789);
+
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `user`
+-- Dumping data for table `users`
 --
 
-LOCK TABLES `user` WRITE;
-/*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,'Address','user@email.com','User','password',123456789);
-/*!40000 ALTER TABLE `user` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `user_seq`
---
-
-DROP TABLE IF EXISTS `user_seq`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `user_seq` (
-  `next_val` bigint DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `user_seq`
---
-
-LOCK TABLES `user_seq` WRITE;
-/*!40000 ALTER TABLE `user_seq` DISABLE KEYS */;
-INSERT INTO `user_seq` VALUES (51);
-/*!40000 ALTER TABLE `user_seq` ENABLE KEYS */;
+LOCK TABLES `users` WRITE;
+/*!40000 ALTER TABLE `users` DISABLE KEYS */;
+/*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -219,4 +179,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-05-21  0:50:26
+-- Dump completed on 2023-05-30 23:36:42

@@ -53,8 +53,8 @@ public class OrderController_withMockServiceTest {
         order.setDescription("Test");
         order.setAcpID(1);
         order.setStatus(Status.WAITING_FOR_PICKUP);
-        order.setDeliveryDate(new Date(new java.util.Date("2021/01/01").getTime()));
-        order.setPickupDate(new Date(new java.util.Date("2021/01/01").getTime()));
+        order.setDeliveryDate(Date.valueOf("2021-01-01"));
+        order.setPickupDate(Date.valueOf("2021-01-01"));
 
         plants_quantity = new HashMap<>();
         plant = new Plant();
@@ -66,7 +66,6 @@ public class OrderController_withMockServiceTest {
         plant.setCategory(null);
 
         plants_quantity.put(plant, 1);
-        order.setPlantQuantityMap(plants_quantity);
 
     }
 
@@ -101,10 +100,7 @@ public class OrderController_withMockServiceTest {
                 .andExpect(jsonPath("$.acpID").value(1))
                 .andExpect(jsonPath("$.status").value("WAITING_FOR_PICKUP"))
                 .andExpect(jsonPath("$.deliveryDate").value("2021-01-01"))
-                .andExpect(jsonPath("$.pickupDate").value("2021-01-01"))
-                .andExpect(jsonPath("$.plantQuantityMap").isMap())
-                .andExpect(jsonPath("$.plantQuantityMap").isNotEmpty())
-        ;
+                .andExpect(jsonPath("$.pickupDate").value("2021-01-01"));
 
         verify(orderService, times(1)).createOrder(any());
     }

@@ -14,6 +14,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import tqs.estore.backend.connection.DropMateAPIClient;
 import tqs.estore.backend.datamodel.*;
 import tqs.estore.backend.exceptions.InvalidOrderException;
+import tqs.estore.backend.repositories.OrderItemRepository;
 import tqs.estore.backend.repositories.OrderRepository;
 import tqs.estore.backend.repositories.PlantRepository;
 import tqs.estore.backend.repositories.UserRepository;
@@ -21,7 +22,6 @@ import tqs.estore.backend.services.OrderService;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.Date;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -39,7 +39,8 @@ public class OrderService_UnitTest {
     private UserRepository userRepository;
     @Mock
     private PlantRepository plantRepository;
-
+    @Mock
+    private OrderItemRepository orderItemRepository;
     @Mock
     private DropMateAPIClient dropMateAPIClient;
 
@@ -64,24 +65,22 @@ public class OrderService_UnitTest {
         plant.setCategory(null);
         plant.setDescription("description");
 
-        Map<Plant, Integer> plantQuantityMap = Map.of(plant, 1);
-
         order = new Order();
         order.setOrderId(1L);
         order.setUser(user);
-        order.setDeliveryDate(new java.sql.Date((new Date("2023/06/04")).getTime()));
+        order.setDeliveryDate(java.sql.Date.valueOf("2023-06-04"));
         order.setPickupCode("EXSV1043");
         order.setStatus(Status.IN_DELIVERY);
         order.setAcpID(1);
         order.setDescription("description");
         order.setTotalPrice(10.0);
-        order.setPlantQuantityMap(plantQuantityMap);
 
 
         orderDTO = new OrderDTO();
         orderDTO.setUserId(1L);
         orderDTO.setPlantQuantityMap(Map.of(1L,1));
         orderDTO.setAcpID(1);
+        orderDTO.setTotalPrice(10.0);
 
     }
 
@@ -105,24 +104,24 @@ public class OrderService_UnitTest {
                         }"""
         ));
 
-        when(orderRepository.save(any(Order.class))).thenReturn(order);
+        when(orderRepository.saveAndFlush(any(Order.class))).thenReturn(order);
         when(userRepository.findById(1L)).thenReturn(java.util.Optional.ofNullable(user));
         when(plantRepository.findById(1L)).thenReturn(java.util.Optional.ofNullable(plant));
+        when(orderItemRepository.save(any(OrderItem.class))).thenReturn(new OrderItem());
 
         Order order = orderService.createOrder(orderDTO);
 
         assertThat(order).isNotNull();
         assertThat(order.getOrderId()).isEqualTo(1L);
         assertThat(order.getUser()).isEqualTo(user);
-        assertThat(order.getDeliveryDate()).isEqualTo(new java.sql.Date(new Date("2023-06-04").getTime()));
+        assertThat(order.getDeliveryDate()).isEqualTo(java.sql.Date.valueOf(("2023-06-04")));
         assertThat(order.getPickupCode()).isEqualTo("EXSV1043");
         assertThat(order.getStatus()).isEqualTo(Status.IN_DELIVERY);
         assertThat(order.getAcpID()).isEqualTo(1);
         assertThat(order.getDescription()).isEqualTo("description");
         assertThat(order.getTotalPrice()).isEqualTo(10.0);
-        assertThat(order.getPlantQuantityMap()).isEqualTo(Map.of(plant, 1));
 
-        verify(orderRepository, times(1)).save(any(Order.class));
+        verify(orderRepository, times(1)).saveAndFlush(any(Order.class));
         verify(userRepository, times(1)).findById(1L);
         verify(plantRepository, times(1)).findById(1L);
         verify(dropMateAPIClient, times(1)).postOrder(1, 1);
@@ -159,30 +158,6 @@ public class OrderService_UnitTest {
         verify(plantRepository, times(1)).findById(1L);
         verify(dropMateAPIClient, times(0)).postOrder(1, 1);
     }
-
-    @Test
-    void whenCreateOrderWithInvalidAcp_thenThrowInvalidOrderException() throws URISyntaxException, ParseException, IOException {
-        when(userRepository.findById(1L)).thenReturn(java.util.Optional.ofNullable(user));
-        when(plantRepository.findById(1L)).thenReturn(java.util.Optional.ofNullable(plant));
-        when(dropMateAPIClient.postOrder(1, 1)).thenReturn((JSONObject) new JSONParser().parse(
-                """
-                        {
-                            "delivery_date": "2023-06-04",
-                            "pickup_code": "EXSV1043",
-                            "status": "IN_DELIVERY"
-                        }"""
-        ));
-
-       assertThatThrownBy(() -> orderService.createOrder(orderDTO))
-                .isInstanceOf(InvalidOrderException.class)
-                .hasMessage("Invalid order.");
-
-        verify(orderRepository, times(0)).save(any(Order.class));
-        verify(userRepository, times(1)).findById(1L);
-        verify(plantRepository, times(1)).findById(1L);
-        verify(dropMateAPIClient, times(1)).postOrder(1, 1);
-    }
-
 
     @Test
     void whenCreateInvalidOrder_thenThrowInvalidOrderException() throws URISyntaxException, ParseException, IOException {

@@ -1,5 +1,6 @@
 package tqs.estore.backend.controllers;
 
+import org.json.simple.parser.ParseException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -8,6 +9,8 @@ import tqs.estore.backend.datamodel.OrderDTO;
 import tqs.estore.backend.exceptions.InvalidOrderException;
 import tqs.estore.backend.services.OrderService;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.List;
 
 @RestController
@@ -21,7 +24,7 @@ public class OrderController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<Order> createOrder(@RequestBody OrderDTO order) throws InvalidOrderException {
+    public ResponseEntity<Order> createOrder(@RequestBody OrderDTO order) throws InvalidOrderException, URISyntaxException, ParseException, IOException {
         return new ResponseEntity<>(orderService.createOrder(order), HttpStatus.OK);
     }
 

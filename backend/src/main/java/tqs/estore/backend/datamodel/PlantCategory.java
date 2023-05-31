@@ -1,13 +1,10 @@
 package tqs.estore.backend.datamodel;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.List;
-
 @Entity
-@Table
+@Table(name = "plantCategories")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -16,7 +13,7 @@ import java.util.List;
 public class PlantCategory {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long categoryId;
 
     @Column(nullable = false)
@@ -24,9 +21,5 @@ public class PlantCategory {
 
     @Column(nullable = false)
     private String photo;
-
-    @JsonIgnore
-    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Plant> plants;
 
 }
