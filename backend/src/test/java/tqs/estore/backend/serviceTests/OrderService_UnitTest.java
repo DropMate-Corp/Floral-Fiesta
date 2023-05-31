@@ -22,6 +22,9 @@ import tqs.estore.backend.services.OrderService;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -172,4 +175,47 @@ public class OrderService_UnitTest {
         verify(plantRepository, times(0)).findById(1L);
         verify(dropMateAPIClient, times(0)).postOrder(1, 1);
     }
+
+
+    @Test
+    void whenGetDeliveredOrders_thenReturnListOfOrders() {
+        List<Order> orders = new ArrayList<>();
+        Order order2 = new Order();
+        order2.setOrderId(2L);
+        order2.setTotalPrice(20.0);
+        order2.setUser(user);
+        order2.setPickupCode("4321");
+        order2.setDescription("Test2");
+        order2.setAcpID(2);
+        order2.setStatus(Status.DELIVERED);
+        order2.setDeliveryDate(Date.valueOf("2021-01-01"));
+        order2.setPickupDate(Date.valueOf("2021-01-01"));
+
+        orders.add(order);
+
+        when(orderRepository.findAllByUserUserIdAndStatus(1L, Status.DELIVERED)).thenReturn(orders);
+
+        List<Order> ordersResponse = orderService.getDeliveredOrders(1L);
+
+        assertThat(ordersResponse).isNotNull();
+        assertThat(ordersResponse).hasSize(1);
+        assertThat(ordersResponse.get(0)).isEqualTo(order2);
+
+        verify(orderRepository, times(1)).findAllByUserUserIdAndStatus(1L, Status.DELIVERED);
+    }
+
+    @Test
+    void whenGetDeliveredOrders_thenReturnEmptyList() {
+        List<Order> orders = new ArrayList<>();
+
+        when(orderRepository.findAllByUserUserIdAndStatus(1L, Status.DELIVERED)).thenReturn(orders);
+
+        List<Order> ordersResponse = orderService.getDeliveredOrders(1L);
+
+        assertThat(ordersResponse).isNotNull();
+        assertThat(ordersResponse).hasSize(0);
+
+        verify(orderRepository, times(1)).findAllByUserUserIdAndStatus(1L, Status.DELIVERED);
+    }
+
 }
