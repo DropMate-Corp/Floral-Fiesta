@@ -191,7 +191,7 @@ public class OrderService_UnitTest {
         order2.setDeliveryDate(Date.valueOf("2021-01-01"));
         order2.setPickupDate(Date.valueOf("2021-01-01"));
 
-        orders.add(order);
+        orders.add(order2);
 
         when(orderRepository.findAllByUserUserIdAndStatus(1L, Status.DELIVERED)).thenReturn(orders);
 
