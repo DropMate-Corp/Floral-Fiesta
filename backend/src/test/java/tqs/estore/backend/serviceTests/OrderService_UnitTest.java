@@ -14,6 +14,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import tqs.estore.backend.connection.DropMateAPIClient;
 import tqs.estore.backend.datamodel.*;
 import tqs.estore.backend.exceptions.InvalidOrderException;
+import tqs.estore.backend.exceptions.OrderNotFoundException;
 import tqs.estore.backend.repositories.OrderItemRepository;
 import tqs.estore.backend.repositories.OrderRepository;
 import tqs.estore.backend.repositories.PlantRepository;
@@ -217,5 +218,58 @@ public class OrderService_UnitTest {
 
         verify(orderRepository, times(1)).findAllByUserUserIdAndStatus(1L, Status.DELIVERED);
     }
+
+    @Test
+    void whenGetOrderById_thenReturnOrder() throws OrderNotFoundException {
+        when(orderRepository.findById(1L)).thenReturn(java.util.Optional.ofNullable(order));
+
+        Order orderResponse = orderService.getOrderById(1L);
+
+        assertThat(orderResponse).isNotNull();
+        assertThat(orderResponse).isEqualTo(order);
+
+        verify(orderRepository, times(1)).findById(1L);
+    }
+
+    @Test
+    void whenGetOrderById_thenThrowOrderNotFoundException() {
+        when(orderRepository.findById(1L)).thenReturn(java.util.Optional.empty());
+
+        assertThatThrownBy(() -> orderService.getOrderById(1L))
+                .isInstanceOf(OrderNotFoundException.class)
+                .hasMessage("Order not found.");
+
+        verify(orderRepository, times(1)).findById(1L);
+    }
+
+    @Test
+    void whenGetOngoingOrders_thenReturnListOfOrders() {
+        List<Order> orders = new ArrayList<>();
+        Order order2 = new Order();
+        order2.setOrderId(2L);
+        order2.setTotalPrice(20.0);
+        order2.setUser(user);
+        order2.setPickupCode("4321");
+        order2.setDescription("Test2");
+        order2.setAcpID(2);
+        order2.setStatus(Status.IN_DELIVERY);
+        order2.setDeliveryDate(Date.valueOf("2021-01-01"));
+        order2.setPickupDate(Date.valueOf("2021-01-01"));
+
+        orders.add(order2);
+
+        when(orderRepository.findAllByUserUserIdAndStatus(1L, Status.IN_DELIVERY)).thenReturn(orders);
+        when(orderRepository.findAllByUserUserIdAndStatus(1L, Status.WAITING_FOR_PICKUP)).thenReturn(new ArrayList<>());
+
+        List<Order> ordersResponse = orderService.getOnGoingOrders(1L);
+
+        assertThat(ordersResponse).isNotNull();
+        assertThat(ordersResponse).hasSize(1);
+        assertThat(ordersResponse.get(0)).isEqualTo(order2);
+
+        verify(orderRepository, times(1)).findAllByUserUserIdAndStatus(1L, Status.IN_DELIVERY);
+        verify(orderRepository, times(0)).findAllByUserUserIdAndStatus(1L, Status.WAITING_FOR_PICKUP);
+    }
+
 
 }
