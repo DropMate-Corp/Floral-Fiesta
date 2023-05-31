@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import tqs.estore.backend.datamodel.Order;
 import tqs.estore.backend.datamodel.OrderDTO;
 import tqs.estore.backend.exceptions.InvalidOrderException;
+import tqs.estore.backend.exceptions.OrderNotFoundException;
 import tqs.estore.backend.services.OrderService;
 
 import java.io.IOException;
@@ -29,13 +30,13 @@ public class OrderController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Order> getOrderById(@PathVariable Long id){
-        return null;
+    public ResponseEntity<Order> getOrderById(@PathVariable Long id) throws OrderNotFoundException {
+        return new ResponseEntity<>(orderService.getOrderById(id), HttpStatus.OK);
     }
 
     @GetMapping("/ongoing/{userId}")
     public ResponseEntity<List<Order>> getOnGoingOrders(@PathVariable Long userId){
-        return null;
+        return new ResponseEntity<>(orderService.getOnGoingOrders(userId), HttpStatus.OK);
     }
 
     @GetMapping("/delivered/{userId}")
