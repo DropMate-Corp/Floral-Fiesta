@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import tqs.estore.backend.connection.DropMateAPIClient;
 import tqs.estore.backend.datamodel.*;
 import tqs.estore.backend.exceptions.InvalidOrderException;
+import tqs.estore.backend.exceptions.OrderNotFoundException;
 import tqs.estore.backend.repositories.OrderItemRepository;
 import tqs.estore.backend.repositories.OrderRepository;
 import tqs.estore.backend.repositories.PlantRepository;
@@ -83,12 +84,18 @@ public class OrderService {
         return newOrder;
     }
 
-    public Order getOrderById(Long orderId) {
-        return null;
+    public Order getOrderById(Long orderId) throws OrderNotFoundException {
+        Optional<Order> order = orderRepository.findById(orderId);
+        if (order.isPresent()) {
+            return order.get();
+        }
+        throw new OrderNotFoundException();
     }
 
     public List<Order> getOnGoingOrders(Long userId) {
-        return null;
+        List<Order> orders = orderRepository.findAllByUserUserIdAndStatus(userId, Status.IN_DELIVERY);
+        orders.addAll(orderRepository.findAllByUserUserIdAndStatus(userId, Status.WAITING_FOR_PICKUP));
+        return orders;
     }
 
     public List<Order> getDeliveredOrders(Long userId) {

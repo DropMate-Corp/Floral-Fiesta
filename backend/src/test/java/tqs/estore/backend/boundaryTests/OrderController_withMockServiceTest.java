@@ -10,6 +10,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import tqs.estore.backend.controllers.OrderController;
 import tqs.estore.backend.datamodel.*;
 import tqs.estore.backend.exceptions.InvalidOrderException;
+import tqs.estore.backend.exceptions.OrderNotFoundException;
 import tqs.estore.backend.services.OrderService;
 
 import java.sql.Date;
@@ -172,6 +173,84 @@ public class OrderController_withMockServiceTest {
                 .andExpect(jsonPath("$.length()").value(0));
 
         verify(orderService, times(1)).getDeliveredOrders(1L);
+    }
+
+
+    @Test
+    void whenGetOrderById_thenReturnOrder_andStatus200() throws Exception {
+        when(orderService.getOrderById(1L)).thenReturn(order);
+
+        mockMvc.perform(get("/floralfiesta/order/1"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.orderId").value(1))
+                .andExpect(jsonPath("$.totalPrice").value(10.0))
+                .andExpect(jsonPath("$.user.userId").value(1))
+                .andExpect(jsonPath("$.pickupCode").value(1234))
+                .andExpect(jsonPath("$.description").value("Test"))
+                .andExpect(jsonPath("$.acpID").value(1))
+                .andExpect(jsonPath("$.status").value("WAITING_FOR_PICKUP"))
+                .andExpect(jsonPath("$.deliveryDate").value("2021-01-01"))
+                .andExpect(jsonPath("$.pickupDate").value("2021-01-01"));
+
+        verify(orderService, times(1)).getOrderById(1L);
+    }
+
+    @Test
+    void whenGetOrderById_thenReturnStatus404() throws Exception {
+        when(orderService.getOrderById(1L)).thenThrow(new OrderNotFoundException());
+
+        mockMvc.perform(get("/floralfiesta/order/1"))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.message").value("Order not found."));
+
+        verify(orderService, times(1)).getOrderById(1L);
+    }
+
+    @Test
+    void whenGetOnGoingOrders_thenReturnOnGoingOrders_andStatus200() throws Exception {
+        List<Order> orders = new ArrayList<>();
+        Order order2 = new Order();
+        order2.setOrderId(2L);
+        order2.setTotalPrice(20.0);
+        order2.setUser(user);
+        order2.setPickupCode("4321");
+        order2.setDescription("Test2");
+        order2.setAcpID(2);
+        order2.setStatus(Status.WAITING_FOR_PICKUP);
+        order2.setDeliveryDate(Date.valueOf("2021-01-01"));
+        order2.setPickupDate(Date.valueOf("2021-01-01"));
+
+        orders.add(order2);
+
+        when(orderService.getOnGoingOrders(1L)).thenReturn(orders);
+
+        mockMvc.perform(get("/floralfiesta/order/ongoing/1"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(1))
+                .andExpect(jsonPath("$[0].orderId").value(2))
+                .andExpect(jsonPath("$[0].totalPrice").value(20.0))
+                .andExpect(jsonPath("$[0].user.userId").value(1))
+                .andExpect(jsonPath("$[0].pickupCode").value(4321))
+                .andExpect(jsonPath("$[0].description").value("Test2"))
+                .andExpect(jsonPath("$[0].acpID").value(2))
+                .andExpect(jsonPath("$[0].status").value("WAITING_FOR_PICKUP"))
+                .andExpect(jsonPath("$[0].deliveryDate").value("2021-01-01"))
+                .andExpect(jsonPath("$[0].pickupDate").value("2021-01-01"));
+
+        verify(orderService, times(1)).getOnGoingOrders(1L);
+    }
+
+    @Test
+    void whenGetOnGoingOrders_thenReturnEmptyList_andStatus200() throws Exception {
+        List<Order> orders = new ArrayList<>();
+
+        when(orderService.getOnGoingOrders(1L)).thenReturn(orders);
+
+        mockMvc.perform(get("/floralfiesta/order/ongoing/1"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(0));
+
+        verify(orderService, times(1)).getOnGoingOrders(1L);
     }
 
 }
