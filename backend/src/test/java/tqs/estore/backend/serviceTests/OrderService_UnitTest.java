@@ -217,7 +217,7 @@ public class OrderService_UnitTest {
         assertThat(ordersResponse).isNotNull();
         assertThat(ordersResponse).hasSize(0);
 
-        verify(orderRepository, times(1)).findAllByUserUserIdAndStatus(1L, Status.DELIVERED);
+        verify(orderRepository, times(2)).findAllByUserUserIdAndStatus(1L, Status.DELIVERED);
     }
 
     @Test
