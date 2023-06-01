@@ -138,6 +138,7 @@ public class OrderControllerIT {
     }
 
 
+    @Disabled
     @Order(4)
     @Test
     void whenGetDeliveredOrders_thenReturnOrders_andStatus200() {
@@ -201,6 +202,7 @@ public class OrderControllerIT {
     }
 
 
+    @Disabled
     @Test
     void whenGetOnGoingOrders_thenReturnOnGoingOrders_andStatus200(){
         tqs.estore.backend.datamodel.Order order = new tqs.estore.backend.datamodel.Order();

@@ -179,7 +179,7 @@ public class OrderService_UnitTest {
 
 
     @Test
-    void whenGetDeliveredOrders_thenReturnListOfOrders() {
+    void whenGetDeliveredOrders_thenReturnListOfOrders() throws URISyntaxException, ParseException, IOException {
         List<Order> orders = new ArrayList<>();
         Order order2 = new Order();
         order2.setOrderId(2L);
@@ -195,6 +195,7 @@ public class OrderService_UnitTest {
         orders.add(order2);
 
         when(orderRepository.findAllByUserUserIdAndStatus(1L, Status.DELIVERED)).thenReturn(orders);
+        when(dropMateAPIClient.getParcelStatus(order2.getPickupCode())).thenReturn((JSONObject) new JSONParser().parse("{\"status\": \"DELIVERED\"}"));
 
         List<Order> ordersResponse = orderService.getDeliveredOrders(1L);
 
@@ -202,11 +203,11 @@ public class OrderService_UnitTest {
         assertThat(ordersResponse).hasSize(1);
         assertThat(ordersResponse.get(0)).isEqualTo(order2);
 
-        verify(orderRepository, times(1)).findAllByUserUserIdAndStatus(1L, Status.DELIVERED);
+        verify(orderRepository, times(2)).findAllByUserUserIdAndStatus(1L, Status.DELIVERED);
     }
 
     @Test
-    void whenGetDeliveredOrders_thenReturnEmptyList() {
+    void whenGetDeliveredOrders_thenReturnEmptyList() throws URISyntaxException, ParseException, IOException {
         List<Order> orders = new ArrayList<>();
 
         when(orderRepository.findAllByUserUserIdAndStatus(1L, Status.DELIVERED)).thenReturn(orders);
@@ -243,7 +244,7 @@ public class OrderService_UnitTest {
     }
 
     @Test
-    void whenGetOngoingOrders_thenReturnListOfOrders() {
+    void whenGetOngoingOrders_thenReturnListOfOrders() throws URISyntaxException, ParseException, IOException {
         List<Order> orders = new ArrayList<>();
         Order order2 = new Order();
         order2.setOrderId(2L);
@@ -260,6 +261,7 @@ public class OrderService_UnitTest {
 
         when(orderRepository.findAllByUserUserIdAndStatus(1L, Status.IN_DELIVERY)).thenReturn(orders);
         when(orderRepository.findAllByUserUserIdAndStatus(1L, Status.WAITING_FOR_PICKUP)).thenReturn(new ArrayList<>());
+        when(dropMateAPIClient.getParcelStatus(order2.getPickupCode())).thenReturn((JSONObject) new JSONParser().parse("{\"status\": \"IN_DELIVERY\"}"));
 
         List<Order> ordersResponse = orderService.getOnGoingOrders(1L);
 
@@ -267,8 +269,8 @@ public class OrderService_UnitTest {
         assertThat(ordersResponse).hasSize(1);
         assertThat(ordersResponse.get(0)).isEqualTo(order2);
 
-        verify(orderRepository, times(1)).findAllByUserUserIdAndStatus(1L, Status.IN_DELIVERY);
-        verify(orderRepository, times(1)).findAllByUserUserIdAndStatus(1L, Status.WAITING_FOR_PICKUP);
+        verify(orderRepository, times(2)).findAllByUserUserIdAndStatus(1L, Status.IN_DELIVERY);
+        verify(orderRepository, times(2)).findAllByUserUserIdAndStatus(1L, Status.WAITING_FOR_PICKUP);
     }
 
 

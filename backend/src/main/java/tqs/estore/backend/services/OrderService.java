@@ -92,13 +92,31 @@ public class OrderService {
         throw new OrderNotFoundException();
     }
 
-    public List<Order> getOnGoingOrders(Long userId) {
+    public List<Order> getOnGoingOrders(Long userId) throws URISyntaxException, ParseException, IOException {
         List<Order> orders = orderRepository.findAllByUserUserIdAndStatus(userId, Status.IN_DELIVERY);
         orders.addAll(orderRepository.findAllByUserUserIdAndStatus(userId, Status.WAITING_FOR_PICKUP));
-        return orders;
+
+        for (Order order: orders){
+            JSONObject reponse = dropMateAPIClient.getParcelStatus(order.getPickupCode());
+            order.setStatus(Status.valueOf((String) reponse.get("status")));
+            orderRepository.saveAndFlush(order);
+        }
+
+        List<Order> returnOrders = orderRepository.findAllByUserUserIdAndStatus(userId, Status.IN_DELIVERY);
+        returnOrders.addAll(orderRepository.findAllByUserUserIdAndStatus(userId, Status.WAITING_FOR_PICKUP));
+        return returnOrders;
     }
 
-    public List<Order> getDeliveredOrders(Long userId) {
+    public List<Order> getDeliveredOrders(Long userId) throws URISyntaxException, ParseException, IOException {
+        List<Order> orders = orderRepository.findAllByUserUserIdAndStatus(userId, Status.DELIVERED);
+
+        for (Order order: orders){
+            JSONObject reponse = dropMateAPIClient.getParcelStatus(order.getPickupCode());
+            order.setStatus(Status.valueOf((String) reponse.get("status")));
+            orderRepository.saveAndFlush(order);
+        }
+
         return orderRepository.findAllByUserUserIdAndStatus(userId, Status.DELIVERED);
     }
+
 }

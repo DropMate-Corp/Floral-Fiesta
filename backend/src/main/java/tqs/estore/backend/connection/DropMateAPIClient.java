@@ -58,4 +58,10 @@ public class DropMateAPIClient  {
         return (JSONArray) new JSONParser().parse(response);
     }
 
+    public JSONObject getParcelStatus(String pickupCode) throws URISyntaxException, ParseException, IOException {
+        URIBuilder builder = new URIBuilder(BASE_URL + "/parcel/" + pickupCode);
+        String url = builder.build().toString();
+        String response = doHttpGet(url);
+        return (JSONObject) new JSONParser().parse(response);
+    }
 }

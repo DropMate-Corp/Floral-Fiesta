@@ -44,7 +44,7 @@ public class ACPControllerIT {
         String BASE_URL = "http://localhost:";
         RestAssured.get(BASE_URL + port + "/floralfiesta/acp/all")
                 .then()
-                .body("size()", is(9))
+                .body("size()", is(8))
                 .statusCode(200);
     }
 

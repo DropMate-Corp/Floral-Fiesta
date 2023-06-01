@@ -35,12 +35,12 @@ public class OrderController {
     }
 
     @GetMapping("/ongoing/{userId}")
-    public ResponseEntity<List<Order>> getOnGoingOrders(@PathVariable Long userId){
+    public ResponseEntity<List<Order>> getOnGoingOrders(@PathVariable Long userId) throws URISyntaxException, ParseException, IOException {
         return new ResponseEntity<>(orderService.getOnGoingOrders(userId), HttpStatus.OK);
     }
 
     @GetMapping("/delivered/{userId}")
-    public ResponseEntity<List<Order>> getDeliveredOrders(@PathVariable Long userId){
+    public ResponseEntity<List<Order>> getDeliveredOrders(@PathVariable Long userId) throws URISyntaxException, ParseException, IOException {
         return new ResponseEntity<>(orderService.getDeliveredOrders(userId), HttpStatus.OK);
     }
 
