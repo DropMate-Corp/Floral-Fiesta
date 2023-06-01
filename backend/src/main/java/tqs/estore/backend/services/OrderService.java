@@ -99,6 +99,21 @@ public class OrderService {
         for (Order order: orders){
             JSONObject reponse = dropMateAPIClient.getParcelStatus(order.getPickupCode());
             order.setStatus(Status.valueOf((String) reponse.get("status")));
+            String pickupDate = (String) reponse.get("pickup_date");
+            if (pickupDate != null) {
+                order.setPickupDate(java.sql.Date.valueOf(pickupDate));
+            }
+            else {
+                order.setPickupDate(null);
+            }
+
+            String deliveryDate = (String) reponse.get("delivery_date");
+            if (deliveryDate != null) {
+                order.setDeliveryDate(java.sql.Date.valueOf(deliveryDate));
+            }
+            else {
+                order.setDeliveryDate(null);
+            }
             orderRepository.saveAndFlush(order);
         }
 
@@ -113,6 +128,23 @@ public class OrderService {
         for (Order order: orders){
             JSONObject reponse = dropMateAPIClient.getParcelStatus(order.getPickupCode());
             order.setStatus(Status.valueOf((String) reponse.get("status")));
+
+            String pickupDate = (String) reponse.get("pickup_date");
+            if (pickupDate != null) {
+                order.setPickupDate(java.sql.Date.valueOf(pickupDate));
+            }
+            else {
+                order.setPickupDate(null);
+            }
+
+            String deliveryDate = (String) reponse.get("delivery_date");
+            if (deliveryDate != null) {
+                order.setDeliveryDate(java.sql.Date.valueOf(deliveryDate));
+            }
+            else {
+                order.setDeliveryDate(null);
+            }
+
             orderRepository.saveAndFlush(order);
         }
 
